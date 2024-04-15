@@ -101,9 +101,12 @@ public class CodeGenerator {
             }
 
         }
-        if (telegramField.description().contains("32 significant bits") && typeToSet.equals("Integer")) {
+        if (shouldBeLong(telegramField, typeToSet, name)) {
             typeToSet = "Long";
             name = telegramField.name();
+        }
+        if (shouldBeLong(telegramField, typeToSet, name)) {
+            typeToSet = "Long";
         }
 
         return new TypeToSet(typeToSet, name);
@@ -125,6 +128,13 @@ public class CodeGenerator {
             type += "[]";
         }
         return type;
+    }
+
+    private static boolean shouldBeLong(TelegramField telegramField, String typeToSet, String name) {
+        if (telegramField.description().contains("32 significant bits") && typeToSet.equals("Integer")) {
+            return true;
+        }
+        return name.equals("chat_id") || name.equals("user_id");
     }
 
     public record TypeToSet(String type, String name) {}
