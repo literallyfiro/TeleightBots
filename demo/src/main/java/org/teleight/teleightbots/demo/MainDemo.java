@@ -61,7 +61,6 @@ public class MainDemo {
                 subMenu3.addRow(button3_1);
             });
 
-
             SendMessage sendMessage = SendMessage.builder()
                     .text("<b>Test message</b>")
                     .chatId(chatId)
