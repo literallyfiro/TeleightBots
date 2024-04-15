@@ -46,6 +46,12 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.withType<Javadoc> {
+    options {
+        (this as CoreJavadocOptions).addStringOption("Xdoclint:all,-missing", "-quiet")
+    }
+}
+
 val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
     from(sourceSets.getByName("main").allSource)
@@ -74,7 +80,6 @@ publishing {
 }
 
 tasks.withType<ShadowJar> {
-
     archiveClassifier.set("")
     archiveVersion.set("")
 
