@@ -24,6 +24,7 @@ import org.teleight.teleightbots.api.objects.video.VideoChatParticipantsInvited;
 import org.teleight.teleightbots.api.objects.video.VideoChatScheduled;
 import org.teleight.teleightbots.api.objects.video.VideoChatStarted;
 
+import java.io.Serializable;
 import java.util.Date;
 
 public record Message(
@@ -334,7 +335,7 @@ public record Message(
         @JsonProperty("reply_markup")
         @Nullable
         InlineKeyboardMarkup replyMarkup
-) implements MaybeInaccessibleMessage {
+) implements MaybeInaccessibleMessage, Serializable {
 
     @JsonIgnore
     public String chatId() {

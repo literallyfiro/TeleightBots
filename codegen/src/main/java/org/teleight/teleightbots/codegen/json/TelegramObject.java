@@ -4,5 +4,7 @@ public record TelegramObject(
         String name,
         String href,
         String[] description,
-        TelegramField[] fields
+        TelegramField[] fields,
+        String[] subtypes,
+        String[] subtype_of
 ) {}

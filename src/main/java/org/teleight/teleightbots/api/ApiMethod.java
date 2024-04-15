@@ -26,11 +26,12 @@ import org.teleight.teleightbots.exception.exceptions.TelegramRequestException;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public interface ApiMethod<R> {
+public interface ApiMethod<R extends Serializable> {
 
     ObjectMapper OBJECT_MAPPER = new ObjectMapper()
             .registerModule(new SimpleModule()
@@ -73,9 +74,14 @@ public interface ApiMethod<R> {
         return UNSAFE_deserializeResponse(answer, type);
     }
 
-    default <K> @NotNull R deserializeResponseArray(@NotNull String answer, @NotNull Class<K> returnClass) throws TelegramRequestException {
+    default <K extends Serializable> @NotNull R deserializeResponseArray(@NotNull String answer, @NotNull Class<K> returnClass) throws TelegramRequestException {
         final ArrayType collectionType = OBJECT_MAPPER.getTypeFactory().constructArrayType(returnClass);
         return UNSAFE_deserializeResponse(answer, collectionType);
+    }
+
+    default <K extends Serializable> R deserializeResponseSerializable(String answer, Class<K> returnClass) throws TelegramRequestException {
+        JavaType type = OBJECT_MAPPER.getTypeFactory().constructType(returnClass);
+        return UNSAFE_deserializeResponse(answer, type);
     }
 
     @ApiStatus.Internal

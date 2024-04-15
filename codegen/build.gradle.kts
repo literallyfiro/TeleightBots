@@ -11,7 +11,6 @@ repositories {
 }
 
 dependencies {
-//    implementation("com.squareup:javapoet:1.13.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
     implementation("io.soabase.java-composer:java-composer:1.0")
     implementation("com.google.code.gson:gson:2.10.1")
