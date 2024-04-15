@@ -18,6 +18,7 @@ import org.teleight.teleightbots.menu.MenuManager;
 import org.teleight.teleightbots.scheduler.Scheduler;
 import org.teleight.teleightbots.updateprocessor.UpdateProcessor;
 
+import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
 
 public interface TelegramBot {
@@ -52,7 +53,7 @@ public interface TelegramBot {
 
     @NotNull ConversationManager getConversationManager();
 
-    <R> @NotNull CompletableFuture<R> execute(@NotNull ApiMethod<R> method);
+    <R extends Serializable> @NotNull CompletableFuture<R> execute(@NotNull ApiMethod<R> method);
 
     default @NotNull CompletableFuture<ChatMember> getUser(@NotNull Chat chat, @NotNull User user) {
         return getUser(chat, user.id());

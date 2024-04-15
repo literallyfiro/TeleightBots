@@ -17,10 +17,15 @@ import org.teleight.teleightbots.extensions.ExtensionManager;
 import org.teleight.teleightbots.extensions.ExtensionManagerImpl;
 import org.teleight.teleightbots.files.FileDownloader;
 import org.teleight.teleightbots.files.FileDownloaderImpl;
-import org.teleight.teleightbots.menu.*;
+import org.teleight.teleightbots.menu.Menu;
+import org.teleight.teleightbots.menu.MenuBuilder;
+import org.teleight.teleightbots.menu.MenuImpl;
+import org.teleight.teleightbots.menu.MenuManager;
+import org.teleight.teleightbots.menu.MenuManagerImpl;
 import org.teleight.teleightbots.scheduler.Scheduler;
 import org.teleight.teleightbots.updateprocessor.UpdateProcessor;
 
+import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
 
 public class Bot implements TelegramBot {
@@ -126,6 +131,24 @@ public class Bot implements TelegramBot {
     }
 
     @Override
+    public @NotNull <R extends Serializable> CompletableFuture<R> execute(@NotNull ApiMethod<R> method) {
+        final CompletableFuture<String> responseFuture = updateProcessor.executeMethod(method);
+        return responseFuture.thenApplyAsync(responseJson -> {
+            final R result;
+            try {
+                result = method.deserializeResponse(responseJson);
+            } catch (Exception e) {
+                if (shouldPrintExceptions) {
+                    e.printStackTrace();
+                }
+                throw new TelegramRequestException(e);
+            }
+            eventManager.call(new MethodSendEvent<>(Bot.this, method, result));
+            return result;
+        });
+    }
+
+    @Override
     public @NotNull ExtensionManager getExtensionManager() {
         return extensionManager;
     }
@@ -165,24 +188,6 @@ public class Bot implements TelegramBot {
         } catch (Exception e) {
             TeleightBots.getExceptionManager().handleException(e);
         }
-    }
-
-    @Override
-    public <R> @NotNull CompletableFuture<R> execute(@NotNull ApiMethod<R> method) {
-        final CompletableFuture<String> responseFuture = updateProcessor.executeMethod(method);
-        return responseFuture.thenApplyAsync(responseJson -> {
-            final R result;
-            try {
-                result = method.deserializeResponse(responseJson);
-            } catch (Exception e) {
-                if (shouldPrintExceptions) {
-                    e.printStackTrace();
-                }
-                throw new TelegramRequestException(e);
-            }
-            eventManager.call(new MethodSendEvent<>(Bot.this, method, result));
-            return result;
-        });
     }
 
 }

@@ -2,7 +2,9 @@ package org.teleight.teleightbots.api.objects.chat.member;
 
 import org.teleight.teleightbots.api.objects.User;
 
-public sealed interface ChatMember permits
+import java.io.Serializable;
+
+public sealed interface ChatMember extends Serializable permits
         ChatMemberOwner,
         ChatMemberAdministrator,
         ChatMemberMember,
