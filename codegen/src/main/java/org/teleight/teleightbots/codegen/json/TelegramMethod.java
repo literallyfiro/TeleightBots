@@ -1,6 +1,6 @@
 package org.teleight.teleightbots.codegen.json;
 
-public record Method(
+public record TelegramMethod(
         String name,
         String href,
         String[] description,

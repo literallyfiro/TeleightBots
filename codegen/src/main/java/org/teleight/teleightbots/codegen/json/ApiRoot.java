@@ -6,6 +6,6 @@ public record ApiRoot(
         String version,
         String release_date,
         String changelog,
-        Map<String, Method> methods,
+        Map<String, TelegramMethod> methods,
         Map<String, TelegramObject> types
 ) {}
