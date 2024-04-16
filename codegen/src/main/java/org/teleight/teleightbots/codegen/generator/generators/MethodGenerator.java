@@ -1,7 +1,6 @@
 package org.teleight.teleightbots.codegen.generator.generators;
 
 import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
@@ -138,23 +137,12 @@ public non-sealed class MethodGenerator implements Generator<TelegramMethod> {
 
         for (TelegramField telegramField : telegramMethod.fields()) {
             TypeToSet typeToSet = retrieveTypeToSet(telegramField);
-            String correctObjectPackage = METHODS_PACKAGE_NAME;
-            if (!isTelegramPrimitive(typeToSet.type())) {
-                correctObjectPackage = OBJECTS_PACKAGE_NAME;
-            }
-            String type = sanitizeType(typeToSet.type());
-            TypeName returning = ClassName.get(correctObjectPackage, typeToSet.type());
-            if (type.endsWith("[]")) {
-                ClassName fieldClassName = ClassName.get(correctObjectPackage, type.replace("[]", ""));
-                returning = ArrayTypeName.of(fieldClassName);
-            }
+            TypeName returning = fetchTypeNameForType(sanitizeType(typeToSet.type()), false);
             FieldSpec.Builder fieldSpecBuilderBuilder = FieldSpec.builder(returning, toCamelCase(telegramField.name()))
                     .addModifiers(Modifier.PRIVATE);
             if (telegramField.required()) {
                 fieldSpecBuilderBuilder.addModifiers(Modifier.FINAL);
             }
-
-
             builderTypeSpecBuilder.addField(fieldSpecBuilderBuilder.build());
 
             if (requiredFields.contains(telegramField)) {
