@@ -122,12 +122,18 @@ public class CodeGenerator {
     }
 
 
-    public static String sanitizeType(String type) {
+    public static String sanitizeType(String type, boolean onlyBasicClassName) {
         if (type.contains("Array of")) {
             type = type.replace("Array of ", "");
-            type += "[]";
+            if (!onlyBasicClassName) {
+                type += "[]";
+            }
         }
         return type;
+    }
+
+    public static String sanitizeType(String type) {
+        return sanitizeType(type, false);
     }
 
     private static boolean shouldBeLong(TelegramField telegramField, String typeToSet, String name) {

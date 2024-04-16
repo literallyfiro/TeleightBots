@@ -9,10 +9,7 @@ import org.teleight.teleightbots.codegen.json.TelegramObject;
 
 import javax.lang.model.element.Modifier;
 
-public class ObjectGenerator implements Generator<TelegramObject> {
-
-    private static final ClassName apiResultInterface = ClassName.get("org.teleight.teleightbots.api", "ApiResult");
-    private static final String objectsPackageName = "org.teleight.teleightbots.api.objects";
+public non-sealed class ObjectGenerator implements Generator<TelegramObject> {
 
     @Override
     public JavaFile generate(String key, TelegramObject telegramObject) {
