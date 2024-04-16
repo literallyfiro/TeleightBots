@@ -8,12 +8,16 @@ import org.teleight.teleightbots.api.ApiMethod;
 import org.teleight.teleightbots.api.MultiPartApiMethod;
 import org.teleight.teleightbots.api.methods.GetMe;
 import org.teleight.teleightbots.api.methods.GetUpdates;
+import org.teleight.teleightbots.api.objects.Chat;
+import org.teleight.teleightbots.api.objects.ChatMember;
+import org.teleight.teleightbots.api.objects.ChatMemberAdministrator;
+import org.teleight.teleightbots.api.objects.ChatMemberLeft;
+import org.teleight.teleightbots.api.objects.ChatMemberMember;
+import org.teleight.teleightbots.api.objects.ChatMemberRestricted;
+import org.teleight.teleightbots.api.objects.ChatMemberUpdated;
 import org.teleight.teleightbots.api.objects.Message;
 import org.teleight.teleightbots.api.objects.Update;
 import org.teleight.teleightbots.api.objects.User;
-import org.teleight.teleightbots.api.objects.chat.Chat;
-import org.teleight.teleightbots.api.objects.chat.ChatMemberUpdated;
-import org.teleight.teleightbots.api.objects.chat.member.*;
 import org.teleight.teleightbots.bot.Bot;
 import org.teleight.teleightbots.bot.BotSettings;
 import org.teleight.teleightbots.event.bot.UpdateReceivedEvent;
@@ -97,9 +101,10 @@ public class LongPollingUpdateProcessor implements UpdateProcessor {
         final BotSettings settings = bot.getBotSettings();
 
         final GetUpdates getUpdates = GetUpdates.of()
-                .withTimeout(settings.updatesTimeout())
-                .withLimit(settings.updatesLimit())
-                .withOffset(lastReceivedUpdate + 1);
+                .timeout(settings.updatesTimeout())
+                .limit(settings.updatesLimit())
+                .offset(lastReceivedUpdate + 1)
+                .build();
 
         final String responseJson = UNSAFE_executeMethod(getUpdates)
                 .exceptionally(throwable -> {
@@ -127,7 +132,7 @@ public class LongPollingUpdateProcessor implements UpdateProcessor {
         int newSize = 0;
         for (int i = 0; i < updates.length; i++) {
             Update update = updates[i];
-            if (update.updateId() >= lastReceivedUpdate) {
+            if (update.update_id() >= lastReceivedUpdate) {
                 updates[newSize] = update;
                 newSize++;
             }
@@ -147,7 +152,7 @@ public class LongPollingUpdateProcessor implements UpdateProcessor {
 
         // Update lastReceivedUpdate
         if (updates.length > 0) {
-            lastReceivedUpdate = updates[updates.length - 1].updateId();
+            lastReceivedUpdate = updates[updates.length - 1].update_id();
         }
     }
 
@@ -156,7 +161,7 @@ public class LongPollingUpdateProcessor implements UpdateProcessor {
         bot.getEventManager()
                 .call(new UpdateReceivedEvent(bot, update, responseJson))
                 .thenAccept(updateReceivedEvent -> {
-                    final boolean hasCallbackQuery = update.callbackQuery() != null;
+                    final boolean hasCallbackQuery = update.callback_query() != null;
                     if (hasCallbackQuery) {
                         final ButtonPressEvent buttonPressEvent = new ButtonPressEvent(bot, update);
                         bot.getMenuManager().getEventNode().call(buttonPressEvent);
@@ -175,7 +180,7 @@ public class LongPollingUpdateProcessor implements UpdateProcessor {
 
                         final boolean hasText = messageText != null;
                         final boolean hasSender = sender != null;
-                        final boolean hasFormat = message.forwardOrigin() == null;
+                        final boolean hasFormat = message.forward_origin() == null;
 
                         if (hasText && hasSender) {
                             final boolean isPossibleCommand = messageText.startsWith("/");
@@ -192,13 +197,13 @@ public class LongPollingUpdateProcessor implements UpdateProcessor {
 
 
                         //Bot join
-                        final boolean hasNewChatMembers = message.newChatMembers() != null;
+                        final boolean hasNewChatMembers = message.new_chat_members() != null;
                         if (hasNewChatMembers) {
-                            boolean isThisBotJoined = Arrays.stream(message.newChatMembers())
+                            boolean isThisBotJoined = Arrays.stream(message.new_chat_members())
                                     .filter(Objects::nonNull)
                                     .filter(user -> user.username() != null)
                                     .anyMatch(user -> user.username().equalsIgnoreCase(bot.getBotUsername()));
-                            Boolean groupChatCreated = message.groupChatCreated();
+                            Boolean groupChatCreated = message.group_chat_created();
                             if (isThisBotJoined || (groupChatCreated != null && groupChatCreated)) {
                                 bot.getEventManager().call(new BotJoinedGroupEvent(bot, update));
                             }
@@ -206,10 +211,10 @@ public class LongPollingUpdateProcessor implements UpdateProcessor {
                     }
 
 
-                    final ChatMemberUpdated myChatMember = update.myChatMember();
+                    final ChatMemberUpdated myChatMember = update.my_chat_member();
                     final boolean hasMyChatMember = myChatMember != null;
                     if (hasMyChatMember) {
-                        final ChatMember newChatMember = myChatMember.newChatMember();
+                        final ChatMember newChatMember = myChatMember.new_chat_member();
                         final boolean isThisBot = bot.getBotUsername().equals(newChatMember.user().username());
                         if (isThisBot) {
                             final boolean isJoined = newChatMember instanceof ChatMemberAdministrator || newChatMember instanceof ChatMemberMember;
@@ -239,12 +244,12 @@ public class LongPollingUpdateProcessor implements UpdateProcessor {
 
 
                     //Inline
-                    if (update.inlineQuery() != null) {
+                    if (update.inline_query() != null) {
                         bot.getEventManager().call(new UserInlineQueryReceivedEvent(bot, update));
                     }
 
 
-                    final Message channelPost = update.channelPost();
+                    final Message channelPost = update.channel_post();
                     final boolean hasChannelPost = channelPost != null;
                     if (hasChannelPost) {
                         final Chat chat = channelPost.chat();

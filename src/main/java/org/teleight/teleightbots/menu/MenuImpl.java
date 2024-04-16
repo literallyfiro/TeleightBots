@@ -3,8 +3,8 @@ package org.teleight.teleightbots.menu;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.teleight.teleightbots.api.objects.keyboard.buttons.InlineKeyboardButton;
-import org.teleight.teleightbots.api.objects.keyboard.InlineKeyboardMarkup;
+import org.teleight.teleightbots.api.objects.InlineKeyboardButton;
+import org.teleight.teleightbots.api.objects.InlineKeyboardMarkup;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -73,7 +73,11 @@ public class MenuImpl implements Menu {
 
             for (int rowIndex = 0; rowIndex < row.size(); rowIndex++) {
                 final MenuButton oldButton = row.get(rowIndex);
-                newColumns[columnIndex][rowIndex] = new InlineKeyboardButton(oldButton.text(), oldButton.url(), oldButton.callbackData(), null);
+                final InlineKeyboardButton button = InlineKeyboardButton.of(oldButton.text())
+                        .url(oldButton.url())
+                        .callbackData(oldButton.callbackData())
+                        .build();
+                newColumns[columnIndex][rowIndex] = button;
             }
         }
 

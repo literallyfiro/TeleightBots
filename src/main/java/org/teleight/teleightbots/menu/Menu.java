@@ -2,7 +2,7 @@ package org.teleight.teleightbots.menu;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.teleight.teleightbots.api.objects.keyboard.InlineKeyboardMarkup;
+import org.teleight.teleightbots.api.objects.InlineKeyboardMarkup;
 
 import java.util.List;
 
@@ -55,7 +55,8 @@ public interface Menu {
      * Returns the keyboard of the menu.
      * @return The keyboard of the menu.
      */
-    @NotNull InlineKeyboardMarkup getKeyboard();
+    @NotNull
+    InlineKeyboardMarkup getKeyboard();
 
     @FunctionalInterface
     interface Builder {

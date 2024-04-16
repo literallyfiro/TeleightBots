@@ -1,9 +1,9 @@
 package org.teleight.teleightbots.event.user;
 
 import org.jetbrains.annotations.NotNull;
+import org.teleight.teleightbots.api.objects.InlineQuery;
 import org.teleight.teleightbots.api.objects.Update;
 import org.teleight.teleightbots.api.objects.User;
-import org.teleight.teleightbots.api.objects.inline.InlineQuery;
 import org.teleight.teleightbots.bot.Bot;
 import org.teleight.teleightbots.event.trait.Event;
 
@@ -14,11 +14,11 @@ public record UserInlineQueryReceivedEvent(
 
     @NotNull
     public User user() {
-        return update().inlineQuery().from();
+        return update().inline_query().from();
     }
 
     public InlineQuery inlineQuery() {
-        return update().inlineQuery();
+        return update().inline_query();
     }
 
 }

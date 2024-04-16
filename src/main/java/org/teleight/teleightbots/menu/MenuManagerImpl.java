@@ -3,17 +3,21 @@ package org.teleight.teleightbots.menu;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
-import org.teleight.teleightbots.api.methods.callback.CallbackQuery;
-import org.teleight.teleightbots.api.methods.inline.EditMessageReplyMarkup;
-import org.teleight.teleightbots.api.methods.inline.EditMessageText;
+import org.teleight.teleightbots.api.methods.EditMessageReplyMarkup;
+import org.teleight.teleightbots.api.methods.EditMessageText;
+import org.teleight.teleightbots.api.objects.CallbackQuery;
+import org.teleight.teleightbots.api.objects.Chat;
+import org.teleight.teleightbots.api.objects.InlineKeyboardMarkup;
+import org.teleight.teleightbots.api.objects.MaybeInaccessibleMessage;
 import org.teleight.teleightbots.api.objects.Message;
-import org.teleight.teleightbots.api.objects.chat.Chat;
-import org.teleight.teleightbots.api.objects.keyboard.InlineKeyboardMarkup;
 import org.teleight.teleightbots.event.EventManager;
 import org.teleight.teleightbots.event.EventManagerImpl;
 import org.teleight.teleightbots.event.keyboard.ButtonPressEvent;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class MenuManagerImpl implements MenuManager {
@@ -41,12 +45,15 @@ public final class MenuManagerImpl implements MenuManager {
 
     private void handleButton(@NotNull MenuButton rowButton, @NotNull ButtonPressEvent event) {
         final CallbackQuery callbackQuery = event.callbackQuery();
-        final Message message = callbackQuery.message();
+        final MaybeInaccessibleMessage maybeInaccessibleMessage = callbackQuery.message();
+        if (!(maybeInaccessibleMessage instanceof Message message)) {
+            return;
+        }
         final Chat chat = message.chat();
         final String chatId = "" + chat.id();
         final String callbackData = callbackQuery.data();
-        final String inlineMessageId = callbackQuery.inlineMessageId();
-        final int messageId = message.messageId();
+        final String inlineMessageId = callbackQuery.inline_message_id();
+        final int messageId = message.message_id();
 
         if(callbackData == null){
             return;
@@ -72,16 +79,15 @@ public final class MenuManagerImpl implements MenuManager {
             final boolean shouldChangeText = text != null;
 
             if (shouldChangeText) {
-                final EditMessageText editMessageText = EditMessageText.builder()
-                        .text(text)
-                        .chatId(chatId)
+                final EditMessageText editMessageText = EditMessageText.of(text)
+                        .chatId(Long.valueOf(chatId))
                         .messageId(messageId)
                         .replyMarkup(keyboard)
                         .build();
                 event.execute(editMessageText);
             } else {
-                final EditMessageReplyMarkup editMessageReplyMarkup = EditMessageReplyMarkup.builder()
-                        .chatId(chatId)
+                final EditMessageReplyMarkup editMessageReplyMarkup = EditMessageReplyMarkup.of()
+                        .chatId(Long.valueOf(chatId))
                         .messageId(messageId)
                         .inlineMessageId(inlineMessageId)
                         .replyMarkup(keyboard)

@@ -2,12 +2,11 @@ package org.teleight.teleightbots.event.keyboard;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.teleight.teleightbots.api.methods.callback.CallbackQuery;
-import org.teleight.teleightbots.api.methods.inline.AnswerCallbackQuery;
-import org.teleight.teleightbots.api.objects.Message;
+import org.teleight.teleightbots.api.methods.AnswerCallbackQuery;
+import org.teleight.teleightbots.api.objects.CallbackQuery;
+import org.teleight.teleightbots.api.objects.MaybeInaccessibleMessage;
 import org.teleight.teleightbots.api.objects.Update;
 import org.teleight.teleightbots.api.objects.User;
-import org.teleight.teleightbots.api.objects.chat.Chat;
 import org.teleight.teleightbots.bot.Bot;
 import org.teleight.teleightbots.event.trait.Event;
 
@@ -19,31 +18,23 @@ public record ButtonPressEvent(
 ) implements Event {
 
     public @NotNull CallbackQuery callbackQuery() {
-        return update.callbackQuery();
+        return update.callback_query();
     }
 
     public @NotNull User from() {
         return callbackQuery().from();
     }
 
-    public @Nullable Message message() {
+    public @Nullable MaybeInaccessibleMessage message() {
         return callbackQuery().message();
     }
 
-    public @NotNull Chat chat() {
-        return message().chat();
-    }
-
-    public @NotNull String chatId() {
-        return chat().id().toString();
-    }
-
     public @NotNull CompletableFuture<Boolean> completeCallback() {
-        return completeCallback(AnswerCallbackQuery.of(callbackQuery().id()));
+        return completeCallback(String.valueOf(AnswerCallbackQuery.of(callbackQuery().id())));
     }
 
     public @NotNull CompletableFuture<Boolean> completeCallback(String text) {
-        return completeCallback(AnswerCallbackQuery.of(callbackQuery().id()).withText(text));
+        return completeCallback(AnswerCallbackQuery.of(callbackQuery().id()).text(text).build());
     }
 
     public @NotNull CompletableFuture<Boolean> completeCallback(AnswerCallbackQuery answerCallbackQuery) {

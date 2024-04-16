@@ -1,7 +1,7 @@
 package org.teleight.teleightbots.event.trait;
 
+import org.teleight.teleightbots.api.objects.Chat;
 import org.teleight.teleightbots.api.objects.Update;
-import org.teleight.teleightbots.api.objects.chat.Chat;
 
 /**
  * Interface for a group bot event.
@@ -21,8 +21,8 @@ public interface GroupBotEvent extends Event {
      * @return the Chat object associated with the event
      */
     default Chat chat() {
-        if (update().myChatMember() != null) {
-            return update().myChatMember().chat();
+        if (update().my_chat_member() != null) {
+            return update().my_chat_member().chat();
         } else {
             return update().message().chat();
         }

@@ -9,20 +9,13 @@ import com.fasterxml.jackson.databind.type.ArrayType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.teleight.teleightbots.api.objects.ApiResponse;
-import org.teleight.teleightbots.api.objects.MaybeInaccessibleMessage;
-import org.teleight.teleightbots.api.objects.chat.boost.source.ChatBoostSource;
-import org.teleight.teleightbots.api.objects.chat.boost.source.serialization.ChatBoostSourceDeserializer;
-import org.teleight.teleightbots.api.objects.chat.member.ChatMember;
-import org.teleight.teleightbots.api.objects.chat.member.ChatMemberDeserializer;
-import org.teleight.teleightbots.api.objects.inline.result.InlineQueryResult;
-import org.teleight.teleightbots.api.objects.inline.result.InlineQueryResultDeserializer;
-import org.teleight.teleightbots.api.objects.input.InputSticker;
-import org.teleight.teleightbots.api.objects.keyboard.ReplyKeyboard;
-import org.teleight.teleightbots.api.objects.keyboard.serialization.KeyboardDeserializer;
-import org.teleight.teleightbots.api.objects.origin.MessageOrigin;
-import org.teleight.teleightbots.api.objects.origin.serialization.MessageOriginDeserializer;
-import org.teleight.teleightbots.api.objects.serialization.MaybeInaccessibleMessageDeserializer;
-import org.teleight.teleightbots.api.utils.*;
+import org.teleight.teleightbots.api.utils.ColorDeserializer;
+import org.teleight.teleightbots.api.utils.ColorSerializer;
+import org.teleight.teleightbots.api.utils.DateDeserializer;
+import org.teleight.teleightbots.api.utils.DateSerializer;
+import org.teleight.teleightbots.api.utils.ParseMode;
+import org.teleight.teleightbots.api.utils.ParseModeDeserializer;
+import org.teleight.teleightbots.api.utils.ParseModeSerializer;
 import org.teleight.teleightbots.exception.exceptions.TelegramRequestException;
 
 import java.awt.*;
@@ -43,9 +36,9 @@ public interface ApiMethod<R extends Serializable> {
      * The object mapper used to serialize and deserialize objects to and from JSON.
      */
     ObjectMapper OBJECT_MAPPER = new ObjectMapper()
-            .registerModule(new SimpleModule()
-                    .addDeserializer(ReplyKeyboard.class, new KeyboardDeserializer())
-            )
+//            .registerModule(new SimpleModule()
+//                    .addDeserializer(ReplyKeyboard.class, new KeyboardDeserializer())
+//            )
             .registerModule(new SimpleModule()
                     .addSerializer(ParseMode.class, new ParseModeSerializer())
                     .addDeserializer(ParseMode.class, new ParseModeDeserializer())
@@ -58,24 +51,21 @@ public interface ApiMethod<R extends Serializable> {
                     .addSerializer(Date.class, new DateSerializer())
                     .addDeserializer(Date.class, new DateDeserializer())
             )
-            .registerModule(new SimpleModule()
-                    .addSerializer(InputSticker.Format.class, new InputStickerFormatSerializer())
-                    .addDeserializer(InputSticker.Format.class, new InputStickerFormatDeserializer())
-            )
-            .registerModule(new SimpleModule()
-                    .addDeserializer(ChatMember.class, new ChatMemberDeserializer())
-            )
-            .registerModule(new SimpleModule()
-                    .addDeserializer(InlineQueryResult.class, new InlineQueryResultDeserializer())
-            )
-            .registerModule(new SimpleModule()
-                    .addDeserializer(MessageOrigin.class, new MessageOriginDeserializer())
-            )
-            .registerModule(new SimpleModule()
-                    .addDeserializer(MaybeInaccessibleMessage.class, new MaybeInaccessibleMessageDeserializer())
-            )
-            .registerModule(new SimpleModule()
-                    .addDeserializer(ChatBoostSource.class, new ChatBoostSourceDeserializer()));
+//            .registerModule(new SimpleModule()
+//                    .addDeserializer(ChatMember.class, new ChatMemberDeserializer())
+//            )
+//            .registerModule(new SimpleModule()
+//                    .addDeserializer(InlineQueryResult.class, new InlineQueryResultDeserializer())
+//            )
+//            .registerModule(new SimpleModule()
+//                    .addDeserializer(MessageOrigin.class, new MessageOriginDeserializer())
+//            )
+//            .registerModule(new SimpleModule()
+//                    .addDeserializer(MaybeInaccessibleMessage.class, new MaybeInaccessibleMessageDeserializer())
+//            )
+//            .registerModule(new SimpleModule()
+//                    .addDeserializer(ChatBoostSource.class, new ChatBoostSourceDeserializer()));
+    ;
 
     /**
      * Deserializes the response from the Telegram Bot API.

@@ -1,11 +1,13 @@
 package org.teleight.teleightbots.codegen.json;
 
+import com.squareup.javapoet.TypeName;
+
 public record TelegramMethod(
         String name,
         String href,
         String[] description,
-        String[] returns,
+        TypeName[] returns,
         TelegramField[] fields,
-        String[] subtype_of,
-        String[] subtypes
+        TypeName[] subtype_of,
+        TypeName[] subtypes
 ) {}

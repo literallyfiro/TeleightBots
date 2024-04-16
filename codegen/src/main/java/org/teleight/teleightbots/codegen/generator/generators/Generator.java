@@ -2,6 +2,8 @@ package org.teleight.teleightbots.codegen.generator.generators;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import org.teleight.teleightbots.codegen.json.TelegramField;
 
 import java.util.List;
@@ -18,14 +20,7 @@ public sealed interface Generator<T> permits ObjectGenerator, MethodGenerator {
     String METHODS_PACKAGE_NAME = "org.teleight.teleightbots.api.methods";
     String OBJECTS_PACKAGE_NAME = "org.teleight.teleightbots.api.objects";
 
-    JavaFile generate(String key, T t);
-
-    default String getCorrectPackageName(String type) {
-        if (!isTelegramPrimitive(type)) {
-            return OBJECTS_PACKAGE_NAME;
-        }
-        return METHODS_PACKAGE_NAME;
-    }
+    JavaFile generate(String name, T t);
 
     default String toCamelCase(String snakeCase) {
         StringBuilder camelCaseBuilder = new StringBuilder();
@@ -43,61 +38,52 @@ public sealed interface Generator<T> permits ObjectGenerator, MethodGenerator {
         return camelCaseBuilder.toString();
     }
 
-    default TypeToSet retrieveTypeToSet(TelegramField telegramField) {
-        String typeToSet = "";
-        String name = "";
+    /**
+     * Since we can only add one type of the same field in java records, we should get the most important type.
+     * Custom objects are more important than "primitive" ones, so they take precedence
+     * If there are no custom objects, then we return a primitive one
+     *
+     * @param telegramField the telegram field
+     * @return the most important type
+     */
+    default TypeName retrieveMostImportantType(TelegramField telegramField) {
+        TypeName mostImportantField = telegramField.types()[0];
 
-        for (String type : telegramField.types()) {
-            type = sanitizeType(type);
-            if (!isTelegramPrimitive(type)) {
-                typeToSet = type;
-                name = telegramField.name();
-            } else {
-                if (typeToSet.isEmpty() && isTelegramPrimitive(typeToSet)) {
-                    typeToSet = type;
-                    name = telegramField.name();
-                }
-                if (typeToSet.isEmpty()) {
-                    typeToSet = type;
-                    name = telegramField.name();
+        for (TypeName typeName : telegramField.types()) {
+            if (typeName instanceof ClassName className) {
+                if (className.packageName().equals(OBJECTS_PACKAGE_NAME)) {
+                    mostImportantField = typeName;
+                    break;
+                } else {
+                    mostImportantField = typeName;
                 }
             }
-
         }
-        if (shouldBeLong(telegramField, typeToSet, name)) {
-            typeToSet = "Long";
-            name = telegramField.name();
-        }
-        if (shouldBeLong(telegramField, typeToSet, name)) {
-            typeToSet = "Long";
-        }
-
-        return new TypeToSet(typeToSet, name);
+        return mostImportantField;
     }
 
-    default boolean isTelegramPrimitive(String type) {
-        return type.contains("String")
-                || type.contains("Integer")
-                || type.contains("Long")
-                || type.contains("Float")
-                || type.contains("Double")
-                || type.contains("Boolean");
-    }
+//    default TelegramField retrieveTypeToSet(TelegramField telegramField) {
+//        TypeName typeToSet = null;
+//        String name = "";
+//
+//        for (TypeName type : telegramField.types()) {
+//            if (type instanceof ClassName || type instanceof ArrayTypeName) {
+//                ArrayTypeName arrayTypeName = (ArrayTypeName) type;
+//
+//            }
+//
+//        }
+//        return new TypeToSet(typeToSet, name, typeToSet instanceof ArrayTypeName);
+//    }
 
-
-    default String sanitizeType(String type, boolean onlyBasicClassName) {
-        if (type.contains("Array of")) {
-            type = type.replace("Array of ", "");
-            if (!onlyBasicClassName) {
-                type += "[]";
-            }
-        }
-        return type;
-    }
-
-    default String sanitizeType(String type) {
-        return sanitizeType(type, false);
-    }
+//    default boolean isTelegramPrimitive(String type) {
+//        return type.contains("String")
+//                || type.contains("Integer")
+//                || type.contains("Long")
+//                || type.contains("Float")
+//                || type.contains("Double")
+//                || type.contains("Boolean");
+//    }
 
     default <O> String listToNiceString(List<O> list, boolean toCamelCase, Function<O, String> nameFunction) {
         StringBuilder sb = new StringBuilder();
@@ -116,13 +102,71 @@ public sealed interface Generator<T> permits ObjectGenerator, MethodGenerator {
         return sb.toString();
     }
 
-    private boolean shouldBeLong(TelegramField telegramField, String typeToSet, String name) {
-        if (telegramField.description().contains("32 significant bits") && typeToSet.equals("Integer")) {
-            return true;
-        }
-        return name.equals("chat_id") || name.equals("user_id");
+//    private boolean shouldBeLong(TelegramField telegramField, String typeToSet, String name) {
+//        if (telegramField.description().contains("32 significant bits") && typeToSet.equals("Integer")) {
+//            return true;
+//        }
+//        return name.equals("chat_id") || name.equals("user_id");
+//    }
+
+    default void generateBuilderClass(String className, TelegramField[] fields, TypeSpec.Builder typeSpecBuilder, List<TelegramField> requiredFields, boolean doNotGetCorrectPackage) {
+//        if (fields == null) return;
+//
+//        TypeSpec.Builder builderTypeSpecBuilder = TypeSpec.classBuilder("Builder")
+//                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+//                .addJavadoc("AutoGenerated Code. Do not modify!");
+//
+//        MethodSpec.Builder methodSpecBuilder = MethodSpec.constructorBuilder()
+//                .addModifiers(Modifier.PRIVATE);
+//        MethodSpec.Builder ofBuilder = MethodSpec.methodBuilder("of")
+//                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+//                .returns(ClassName.get("", "Builder"));
+//
+//        for (TelegramField telegramField : fields) {
+//            TypeToSet typeToSet = retrieveTypeToSet(telegramField);
+//            TypeName returning = fetchTypeNameForType(sanitizeType(typeToSet.type()), false, typeToSet.isArray(), doNotGetCorrectPackage);
+//            FieldSpec.Builder fieldSpecBuilderBuilder = FieldSpec.builder(returning, toCamelCase(telegramField.name()))
+//                    .addModifiers(Modifier.PRIVATE);
+//            if (telegramField.required()) {
+//                fieldSpecBuilderBuilder.addModifiers(Modifier.FINAL);
+//            }
+//            builderTypeSpecBuilder.addField(fieldSpecBuilderBuilder.build());
+//
+//            if (requiredFields.contains(telegramField)) {
+//                ofBuilder.addParameter(returning, telegramField.name());
+//                methodSpecBuilder.addParameter(returning, telegramField.name());
+//                methodSpecBuilder.addStatement("this.$N = $N", toCamelCase(telegramField.name()), telegramField.name());
+//            } else {
+//                MethodSpec.Builder methodSpecOtherStuffBuilder = MethodSpec.methodBuilder(toCamelCase(telegramField.name()))
+//                        .addModifiers(Modifier.PUBLIC)
+//                        .addAnnotation(NOT_NULL_ANNOTATION)
+//                        .returns(ClassName.get("", "Builder"))
+//                        .addParameter(ParameterSpec.builder(returning, telegramField.name()).addAnnotation(NOT_NULL_ANNOTATION).build())
+//                        .addStatement("this.$N = $N", toCamelCase(telegramField.name()), telegramField.name())
+//                        .addStatement("return this");
+//                try {
+//                    methodSpecOtherStuffBuilder.addJavadoc(telegramField.description());
+//                } catch (Exception ignored) {}
+//                builderTypeSpecBuilder.addMethod(methodSpecOtherStuffBuilder.build());
+//            }
+//        }
+//
+//        String niceString = listToNiceString(Arrays.asList(fields), true, TelegramField::name);
+//        builderTypeSpecBuilder.addMethod(MethodSpec.methodBuilder("build")
+//                .addModifiers(Modifier.PUBLIC)
+//                .returns(ClassName.get("", className))
+//                .addStatement("return new $L($L)", className, niceString)
+//                .build()
+//        );
+//
+//        String builderNiceString = listToNiceString(requiredFields, false, TelegramField::name);
+//        ofBuilder.addStatement("return new Builder($L)", builderNiceString);
+//
+//        builderTypeSpecBuilder.addMethod(methodSpecBuilder.build());
+//        typeSpecBuilder.addType(builderTypeSpecBuilder.build());
+//        typeSpecBuilder.addMethod(ofBuilder.build());
     }
 
-    record TypeToSet(String type, String name) {}
+//    record TypeToSet(TypeName type, String name, boolean isArray) {}
 
 }
