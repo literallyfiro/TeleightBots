@@ -9,8 +9,9 @@ import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import org.teleight.teleightbots.codegen.json.TelegramMethod;
+import com.squareup.javapoet.WildcardTypeName;
 import org.teleight.teleightbots.codegen.json.TelegramField;
+import org.teleight.teleightbots.codegen.json.TelegramMethod;
 
 import javax.lang.model.element.Modifier;
 import java.util.ArrayList;
@@ -98,7 +99,7 @@ public non-sealed class MethodGenerator implements Generator<TelegramMethod> {
                 .addAnnotation(NOT_NULL_ANNOTATION)
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(ParameterSpec.builder(String.class, "answer").addAnnotation(NOT_NULL_ANNOTATION).build())
-                .addStatement("return deserializeResponse(answer, " + type + ".class)")
+                .addStatement("return deserializeResponse(answer, $L.class)", type)
                 .returns(ClassName.get("", type))
                 .build());
     }
@@ -114,14 +115,30 @@ public non-sealed class MethodGenerator implements Generator<TelegramMethod> {
 
     private void generateMultipleReturnMethod(TelegramMethod method, TypeSpec.Builder typeSpecBuilder) {
         typeSpecBuilder.addSuperinterface(API_RESULT_SERIALIZABLE_INTERFACE);
-        typeSpecBuilder.addMethod(MethodSpec.methodBuilder("getSerializableClasses")
+
+        ClassName serializable = ClassName.get("java.io", "Serializable");
+        ClassName list = ClassName.get("java.util", "List");
+        ClassName arrayList = ClassName.get("java.util", "ArrayList");
+        ClassName classType = ClassName.get(Class.class);
+
+        TypeName serializableWildcard = WildcardTypeName.subtypeOf(serializable);
+        TypeName classParameter = ParameterizedTypeName.get(classType, serializableWildcard);
+        TypeName listParameterizedType = ParameterizedTypeName.get(list, classParameter);
+
+        MethodSpec.Builder methodSpecBuilder = MethodSpec.methodBuilder("getSerializableClasses")
                 .addAnnotation(Override.class)
                 .addAnnotation(NOT_NULL_ANNOTATION)
                 .addModifiers(Modifier.PUBLIC)
-                .addStatement("return List.of(" + listToNiceString(Arrays.asList(method.returns()), false, String::toString) + ")")
-                .returns(List.class)
-                .build());
+                .addStatement("$T result = new $T<>()", listParameterizedType, arrayList)
+                .returns(listParameterizedType);
 
+        for (String returnClass : method.returns()) {
+            ClassName clazz = ClassName.get(getCorrectPackageName(returnClass), returnClass);
+            methodSpecBuilder.addStatement("result.add($T.class)", clazz);
+        }
+
+        methodSpecBuilder.addStatement("return result");
+        typeSpecBuilder.addMethod(methodSpecBuilder.build());
     }
 
     private void generateBuilderClass(String className, TelegramMethod telegramMethod, TypeSpec.Builder typeSpecBuilder, List<TelegramField> requiredFields) {
@@ -168,12 +185,12 @@ public non-sealed class MethodGenerator implements Generator<TelegramMethod> {
         builderTypeSpecBuilder.addMethod(MethodSpec.methodBuilder("build")
                 .addModifiers(Modifier.PUBLIC)
                 .returns(ClassName.get("", className))
-                .addStatement("return new " + className + "(" + niceString + ")")
+                .addStatement("return new $L($L)", className, niceString)
                 .build()
         );
 
-        String niceString2 = listToNiceString(requiredFields, false, TelegramField::name);
-        ofBuilder.addStatement("return new Builder" + "(" + niceString2 + ")");
+        String builderNiceString = listToNiceString(requiredFields, false, TelegramField::name);
+        ofBuilder.addStatement("return new Builder($L)", builderNiceString);
 
         builderTypeSpecBuilder.addMethod(methodSpecBuilder.build());
         typeSpecBuilder.addType(builderTypeSpecBuilder.build());
