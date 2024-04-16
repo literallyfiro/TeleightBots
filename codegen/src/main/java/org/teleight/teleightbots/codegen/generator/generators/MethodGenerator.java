@@ -1,4 +1,4 @@
-package org.teleight.teleightbots.codegen.generator;
+package org.teleight.teleightbots.codegen.generator.generators;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ArrayTypeName;
@@ -17,7 +17,6 @@ import javax.lang.model.element.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 public non-sealed class MethodGenerator implements Generator<Method> {
 
@@ -34,13 +33,13 @@ public non-sealed class MethodGenerator implements Generator<Method> {
         // check if method had any subtypes
         if (!(method.subtype_of() == null)) {
             for (String subtypeOf : method.subtype_of()) {
-                typeSpecBuilder.addSuperinterface(ClassName.get(methodsPackageName, CodeGenerator.sanitizeType(subtypeOf)));
+                typeSpecBuilder.addSuperinterface(ClassName.get(METHODS_PACKAGE_NAME, sanitizeType(subtypeOf)));
             }
         }
 
         // if there are no fields, return an empty method
         if (method.fields() == null) {
-            return JavaFile.builder(methodsPackageName, typeSpecBuilder.build())
+            return JavaFile.builder(METHODS_PACKAGE_NAME, typeSpecBuilder.build())
                     .skipJavaLangImports(true)
                     .build();
         }
@@ -58,7 +57,7 @@ public non-sealed class MethodGenerator implements Generator<Method> {
 
         generateBuilderClass(correctedClassName, method, typeSpecBuilder, requiredFields);
 
-        return JavaFile.builder(methodsPackageName, typeSpecBuilder.build())
+        return JavaFile.builder(METHODS_PACKAGE_NAME, typeSpecBuilder.build())
                 .skipJavaLangImports(true)
                 .build();
     }
@@ -66,8 +65,8 @@ public non-sealed class MethodGenerator implements Generator<Method> {
     private List<TelegramField> populateFields(Method method, TypeSpec.Builder typeSpecBuilder) {
         List<TelegramField> requiredFields = new ArrayList<>();
         for (TelegramField field : method.fields()) {
-            CodeGenerator.TypeToSet typeToSet = CodeGenerator.retrieveTypeToSet(field);
-            String type = CodeGenerator.sanitizeType(typeToSet.type());
+            TypeToSet typeToSet = retrieveTypeToSet(field);
+            String type = sanitizeType(typeToSet.type());
             TypeName returning = fetchTypeNameForType(type, false);
 
             FieldSpec.Builder fieldSpecBuilder = FieldSpec.builder(returning, typeToSet.name());
@@ -83,7 +82,7 @@ public non-sealed class MethodGenerator implements Generator<Method> {
     private MethodSpec createEndpointMethod(String key) {
         return MethodSpec.methodBuilder("getEndpointURL")
                 .addAnnotation(Override.class)
-                .addAnnotation(notNullAnnotation)
+                .addAnnotation(NOT_NULL_ANNOTATION)
                 .addModifiers(Modifier.PUBLIC)
                 .addStatement("return $S", key)
                 .returns(String.class)
@@ -91,15 +90,15 @@ public non-sealed class MethodGenerator implements Generator<Method> {
     }
 
     private void generateOneReturnMethod(Method method, TypeSpec.Builder typeSpecBuilder) {
-        String type = CodeGenerator.sanitizeType(method.returns()[0], true);
+        String type = sanitizeType(method.returns()[0], true);
         TypeName parameterizedTypeName = fetchTypeNameForType(type, true);
         typeSpecBuilder.addSuperinterface(parameterizedTypeName);
 
         typeSpecBuilder.addMethod(MethodSpec.methodBuilder("deserializeResponse")
                 .addAnnotation(Override.class)
-                .addAnnotation(notNullAnnotation)
+                .addAnnotation(NOT_NULL_ANNOTATION)
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(ParameterSpec.builder(String.class, "answer").addAnnotation(notNullAnnotation).build())
+                .addParameter(ParameterSpec.builder(String.class, "answer").addAnnotation(NOT_NULL_ANNOTATION).build())
                 .addStatement("return deserializeResponse(answer, " + type + ".class)")
                 .returns(ClassName.get("", type))
                 .build());
@@ -109,16 +108,16 @@ public non-sealed class MethodGenerator implements Generator<Method> {
         String packageName = getCorrectPackageName(type);
         TypeName typeName = ClassName.get(packageName, type);
         if (parameterized) {
-            return ParameterizedTypeName.get(apiMethodInterface, typeName);
+            return ParameterizedTypeName.get(API_METHOD_INTERFACE, typeName);
         }
         return typeName;
     }
 
     private void generateMultipleReturnMethod(Method method, TypeSpec.Builder typeSpecBuilder) {
-        typeSpecBuilder.addSuperinterface(apiResultSerializableInterface);
+        typeSpecBuilder.addSuperinterface(API_RESULT_SERIALIZABLE_INTERFACE);
         typeSpecBuilder.addMethod(MethodSpec.methodBuilder("getSerializableClasses")
                 .addAnnotation(Override.class)
-                .addAnnotation(notNullAnnotation)
+                .addAnnotation(NOT_NULL_ANNOTATION)
                 .addModifiers(Modifier.PUBLIC)
                 .addStatement("return List.of(" + listToNiceString(Arrays.asList(method.returns()), false, String::toString) + ")")
                 .returns(List.class)
@@ -138,18 +137,18 @@ public non-sealed class MethodGenerator implements Generator<Method> {
                 .returns(ClassName.get("", "Builder"));
 
         for (TelegramField telegramField : telegramMethod.fields()) {
-            CodeGenerator.TypeToSet typeToSet = CodeGenerator.retrieveTypeToSet(telegramField);
-            String correctObjectPackage = methodsPackageName;
-            if (!CodeGenerator.isTelegramPrimitive(typeToSet.type())) {
-                correctObjectPackage = objectsPackageName;
+            TypeToSet typeToSet = retrieveTypeToSet(telegramField);
+            String correctObjectPackage = METHODS_PACKAGE_NAME;
+            if (!isTelegramPrimitive(typeToSet.type())) {
+                correctObjectPackage = OBJECTS_PACKAGE_NAME;
             }
-            String type = CodeGenerator.sanitizeType(typeToSet.type());
+            String type = sanitizeType(typeToSet.type());
             TypeName returning = ClassName.get(correctObjectPackage, typeToSet.type());
             if (type.endsWith("[]")) {
                 ClassName fieldClassName = ClassName.get(correctObjectPackage, type.replace("[]", ""));
                 returning = ArrayTypeName.of(fieldClassName);
             }
-            FieldSpec.Builder fieldSpecBuilderBuilder = FieldSpec.builder(returning, CodeGenerator.toCamelCase(telegramField.name()))
+            FieldSpec.Builder fieldSpecBuilderBuilder = FieldSpec.builder(returning, toCamelCase(telegramField.name()))
                     .addModifiers(Modifier.PRIVATE);
             if (telegramField.required()) {
                 fieldSpecBuilderBuilder.addModifiers(Modifier.FINAL);
@@ -161,14 +160,14 @@ public non-sealed class MethodGenerator implements Generator<Method> {
             if (requiredFields.contains(telegramField)) {
                 ofBuilder.addParameter(returning, telegramField.name());
                 methodSpecBuilder.addParameter(returning, telegramField.name());
-                methodSpecBuilder.addStatement("this.$N = $N", CodeGenerator.toCamelCase(telegramField.name()), telegramField.name());
+                methodSpecBuilder.addStatement("this.$N = $N", toCamelCase(telegramField.name()), telegramField.name());
             } else {
-                MethodSpec.Builder methodSpecOtherStuffBuilder = MethodSpec.methodBuilder(CodeGenerator.toCamelCase(telegramField.name()))
+                MethodSpec.Builder methodSpecOtherStuffBuilder = MethodSpec.methodBuilder(toCamelCase(telegramField.name()))
                         .addModifiers(Modifier.PUBLIC)
-                        .addAnnotation(notNullAnnotation)
+                        .addAnnotation(NOT_NULL_ANNOTATION)
                         .returns(ClassName.get("", "Builder"))
-                        .addParameter(ParameterSpec.builder(returning, telegramField.name()).addAnnotation(notNullAnnotation).build())
-                        .addStatement("this.$N = $N", CodeGenerator.toCamelCase(telegramField.name()), telegramField.name())
+                        .addParameter(ParameterSpec.builder(returning, telegramField.name()).addAnnotation(NOT_NULL_ANNOTATION).build())
+                        .addStatement("this.$N = $N", toCamelCase(telegramField.name()), telegramField.name())
                         .addStatement("return this");
                 try {
                     methodSpecOtherStuffBuilder.addJavadoc(telegramField.description());
@@ -191,23 +190,6 @@ public non-sealed class MethodGenerator implements Generator<Method> {
         builderTypeSpecBuilder.addMethod(methodSpecBuilder.build());
         typeSpecBuilder.addType(builderTypeSpecBuilder.build());
         typeSpecBuilder.addMethod(ofBuilder.build());
-    }
-
-    private <T> String listToNiceString(List<T> list, boolean toCamelCase, Function<T, String> nameFunction) {
-        StringBuilder sb = new StringBuilder();
-        boolean last;
-        for (int i = 0; i < list.size(); i++) {
-            T item = list.get(i);
-            last = i == list.size() - 1;
-
-            String name = toCamelCase ? CodeGenerator.toCamelCase(nameFunction.apply(item)) : nameFunction.apply(item);
-            sb.append(name);
-
-            if (!last) {
-                sb.append(", ");
-            }
-        }
-        return sb.toString();
     }
 
 }
