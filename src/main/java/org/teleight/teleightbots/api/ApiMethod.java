@@ -9,10 +9,20 @@ import com.fasterxml.jackson.databind.type.ArrayType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.teleight.teleightbots.api.objects.ApiResponse;
+import org.teleight.teleightbots.api.objects.ChatBoostSource;
+import org.teleight.teleightbots.api.objects.ChatMember;
+import org.teleight.teleightbots.api.objects.InlineQueryResult;
+import org.teleight.teleightbots.api.objects.MaybeInaccessibleMessage;
+import org.teleight.teleightbots.api.objects.MessageOrigin;
+import org.teleight.teleightbots.api.utils.ChatBoostSourceDeserializer;
+import org.teleight.teleightbots.api.utils.ChatMemberDeserializer;
 import org.teleight.teleightbots.api.utils.ColorDeserializer;
 import org.teleight.teleightbots.api.utils.ColorSerializer;
 import org.teleight.teleightbots.api.utils.DateDeserializer;
 import org.teleight.teleightbots.api.utils.DateSerializer;
+import org.teleight.teleightbots.api.utils.InlineQueryResultDeserializer;
+import org.teleight.teleightbots.api.utils.MaybeInaccessibleMessageDeserializer;
+import org.teleight.teleightbots.api.utils.MessageOriginDeserializer;
 import org.teleight.teleightbots.api.utils.ParseMode;
 import org.teleight.teleightbots.api.utils.ParseModeDeserializer;
 import org.teleight.teleightbots.api.utils.ParseModeSerializer;
@@ -26,7 +36,7 @@ import java.util.Date;
 /**
  * Base interface for all Telegram Bot API methods.
  *
- * @param <R> type of the result of the method
+ * @param <R> result type of the method
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -51,20 +61,20 @@ public interface ApiMethod<R extends Serializable> {
                     .addSerializer(Date.class, new DateSerializer())
                     .addDeserializer(Date.class, new DateDeserializer())
             )
-//            .registerModule(new SimpleModule()
-//                    .addDeserializer(ChatMember.class, new ChatMemberDeserializer())
-//            )
-//            .registerModule(new SimpleModule()
-//                    .addDeserializer(InlineQueryResult.class, new InlineQueryResultDeserializer())
-//            )
-//            .registerModule(new SimpleModule()
-//                    .addDeserializer(MessageOrigin.class, new MessageOriginDeserializer())
-//            )
-//            .registerModule(new SimpleModule()
-//                    .addDeserializer(MaybeInaccessibleMessage.class, new MaybeInaccessibleMessageDeserializer())
-//            )
-//            .registerModule(new SimpleModule()
-//                    .addDeserializer(ChatBoostSource.class, new ChatBoostSourceDeserializer()));
+            .registerModule(new SimpleModule()
+                    .addDeserializer(ChatMember.class, new ChatMemberDeserializer())
+            )
+            .registerModule(new SimpleModule()
+                    .addDeserializer(InlineQueryResult.class, new InlineQueryResultDeserializer())
+            )
+            .registerModule(new SimpleModule()
+                    .addDeserializer(MessageOrigin.class, new MessageOriginDeserializer())
+            )
+            .registerModule(new SimpleModule()
+                    .addDeserializer(MaybeInaccessibleMessage.class, new MaybeInaccessibleMessageDeserializer())
+            )
+            .registerModule(new SimpleModule()
+                    .addDeserializer(ChatBoostSource.class, new ChatBoostSourceDeserializer()));
     ;
 
     /**

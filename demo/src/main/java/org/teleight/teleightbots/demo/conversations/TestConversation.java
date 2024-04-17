@@ -1,7 +1,7 @@
 package org.teleight.teleightbots.demo.conversations;
 
 import org.jetbrains.annotations.NotNull;
-import org.teleight.teleightbots.api.methods.send.SendMessage;
+import org.teleight.teleightbots.api.methods.SendMessage;
 import org.teleight.teleightbots.conversation.Conversation;
 import org.teleight.teleightbots.conversation.ConversationContext;
 import org.teleight.teleightbots.conversation.ConversationTimeout;
@@ -15,27 +15,18 @@ public class TestConversation implements Conversation {
         var chat = context.chat();
         var chatId = chat.id();
 
-        SendMessage startMessage = SendMessage.builder()
-                .chatId(chat.id())
-                .text("Send me a messages with the text \"hello\"")
-                .build();
+        SendMessage startMessage = SendMessage.of(chatId, "Send me a messages with the text \"hello\"").build();
         context.execute(startMessage);
 
         var update = context.waitForUpdate(10, TimeUnit.SECONDS);
         if (update == null) {
-            SendMessage resultToUser = SendMessage.builder()
-                    .chatId(chatId)
-                    .text("you didnt send the message in time..")
-                    .build();
+            SendMessage resultToUser = SendMessage.of(chatId, "you didnt send the message in time..").build();
             context.execute(resultToUser);
             return;
         }
         var message = update.message();
         if(message == null){
-            SendMessage resultToUser = SendMessage.builder()
-                    .chatId(chatId)
-                    .text("You didnt send a message..")
-                    .build();
+            SendMessage resultToUser = SendMessage.of(chatId, "you didnt send a message..").build();
             context.execute(resultToUser);
             return;
         }
@@ -43,16 +34,10 @@ public class TestConversation implements Conversation {
 
 
         if (message.text().equals("hello")) {
-            SendMessage resultToUser = SendMessage.builder()
-                    .chatId(chatId)
-                    .text("Good job!")
-                    .build();
+            SendMessage resultToUser = SendMessage.of(chatId, "Good job!").build();
             context.execute(resultToUser);
         } else {
-            SendMessage resultToUser = SendMessage.builder()
-                    .chatId(chatId)
-                    .text("You didn't send \"hello\"!")
-                    .build();
+            SendMessage resultToUser = SendMessage.of(chatId, "You didn't send \"hello\"!").build();
             context.execute(resultToUser);
         }
     }

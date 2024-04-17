@@ -21,11 +21,7 @@ import org.teleight.teleightbots.api.objects.User;
 import org.teleight.teleightbots.bot.Bot;
 import org.teleight.teleightbots.bot.BotSettings;
 import org.teleight.teleightbots.event.bot.UpdateReceivedEvent;
-import org.teleight.teleightbots.event.bot.channel.BotJoinChannelEvent;
-import org.teleight.teleightbots.event.bot.channel.BotQuitChannelEvent;
-import org.teleight.teleightbots.event.bot.channel.ChannelSendMessageEvent;
 import org.teleight.teleightbots.event.bot.group.BotJoinedGroupEvent;
-import org.teleight.teleightbots.event.bot.group.BotLeftGroupEvent;
 import org.teleight.teleightbots.event.keyboard.ButtonPressEvent;
 import org.teleight.teleightbots.event.user.UserInlineQueryReceivedEvent;
 import org.teleight.teleightbots.event.user.UserMessageReceivedEvent;
@@ -221,24 +217,24 @@ public class LongPollingUpdateProcessor implements UpdateProcessor {
                             final boolean isLeft = newChatMember instanceof ChatMemberLeft || newChatMember instanceof ChatMemberRestricted;
 
                             final Chat chat = myChatMember.chat();
-                            final boolean isChannel = chat.isChannel();
-
-
-                            if (isJoined) {
-                                if (isChannel) {
-                                    bot.getEventManager().call(new BotJoinChannelEvent(bot, update));
-                                } else {
-                                    bot.getEventManager().call(new BotJoinedGroupEvent(bot, update));
-                                }
-                            }
-
-                            if (isLeft) {
-                                if (isChannel) {
-                                    bot.getEventManager().call(new BotQuitChannelEvent(bot, update));
-                                } else {
-                                    bot.getEventManager().call(new BotLeftGroupEvent(bot, update));
-                                }
-                            }
+//                            final boolean isChannel = chat.isChannel();
+//
+//
+//                            if (isJoined) {
+//                                if (isChannel) {
+//                                    bot.getEventManager().call(new BotJoinChannelEvent(bot, update));
+//                                } else {
+//                                    bot.getEventManager().call(new BotJoinedGroupEvent(bot, update));
+//                                }
+//                            }
+//
+//                            if (isLeft) {
+//                                if (isChannel) {
+//                                    bot.getEventManager().call(new BotQuitChannelEvent(bot, update));
+//                                } else {
+//                                    bot.getEventManager().call(new BotLeftGroupEvent(bot, update));
+//                                }
+//                            }
                         }
                     }
 
@@ -251,13 +247,13 @@ public class LongPollingUpdateProcessor implements UpdateProcessor {
 
                     final Message channelPost = update.channel_post();
                     final boolean hasChannelPost = channelPost != null;
-                    if (hasChannelPost) {
-                        final Chat chat = channelPost.chat();
-                        final boolean isChannel = chat.isChannel();
-                        if (isChannel) {
-                            bot.getEventManager().call(new ChannelSendMessageEvent(bot, update, chat));
-                        }
-                    }
+//                    if (hasChannelPost) {
+//                        final Chat chat = channelPost.chat();
+//                        final boolean isChannel = chat.isChannel();
+//                        if (isChannel) {
+//                            bot.getEventManager().call(new ChannelSendMessageEvent(bot, update, chat));
+//                        }
+//                    }
                 });
     }
 
