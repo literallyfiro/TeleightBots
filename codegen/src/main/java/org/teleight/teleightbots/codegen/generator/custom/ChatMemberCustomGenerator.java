@@ -1,4 +1,4 @@
-package org.teleight.teleightbots.codegen.generator.customadder.impl;
+package org.teleight.teleightbots.codegen.generator.custom;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
@@ -6,13 +6,12 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.WildcardTypeName;
-import org.teleight.teleightbots.codegen.generator.customadder.CustomAdder;
 
 import javax.lang.model.element.Modifier;
 
 import static org.teleight.teleightbots.codegen.generator.generators.Generator.JAVA_CLASS_CLASSNAME;
 
-public class ChatMemberCustomAdder implements CustomAdder {
+public class ChatMemberCustomGenerator implements CustomGenerator {
     @Override
     public void add(TypeSpec.Builder classBuilder, String className) {
         if (className.equals("ChatMember")) {

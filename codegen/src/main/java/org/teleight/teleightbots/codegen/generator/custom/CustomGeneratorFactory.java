@@ -1,10 +1,8 @@
-package org.teleight.teleightbots.codegen.generator.customadder;
+package org.teleight.teleightbots.codegen.generator.custom;
 
-import org.teleight.teleightbots.codegen.generator.customadder.impl.ChatMemberCustomAdder;
+public class CustomGeneratorFactory {
 
-public class CustomAdderFactory {
-
-    public static CustomAdder getCustomAdder(String className) {
+    public static CustomGenerator getCustomAdder(String className) {
         return switch (className) {
             case "ChatMember",
                  "ChatMemberOwner",
@@ -12,7 +10,7 @@ public class CustomAdderFactory {
                  "ChatMemberMember",
                  "ChatMemberRestricted",
                  "ChatMemberLeft",
-                 "ChatMemberBanned" -> new ChatMemberCustomAdder();
+                 "ChatMemberBanned" -> new ChatMemberCustomGenerator();
             case "User" -> null;
             default -> null;
         };

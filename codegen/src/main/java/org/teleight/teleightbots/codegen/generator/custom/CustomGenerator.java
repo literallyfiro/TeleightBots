@@ -1,8 +1,8 @@
-package org.teleight.teleightbots.codegen.generator.customadder;
+package org.teleight.teleightbots.codegen.generator.custom;
 
 import com.squareup.javapoet.TypeSpec;
 
-public interface CustomAdder {
+public interface CustomGenerator {
 
     void add(TypeSpec.Builder classBuilder, String className);
 

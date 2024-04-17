@@ -5,8 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import org.teleight.teleightbots.codegen.generator.customadder.CustomAdder;
-import org.teleight.teleightbots.codegen.generator.customadder.CustomAdderFactory;
+import org.teleight.teleightbots.codegen.generator.custom.CustomGenerator;
+import org.teleight.teleightbots.codegen.generator.custom.CustomGeneratorFactory;
 import org.teleight.teleightbots.codegen.generator.generators.Generator;
 import org.teleight.teleightbots.codegen.generator.generators.MethodGenerator;
 import org.teleight.teleightbots.codegen.generator.generators.ObjectGenerator;
@@ -57,9 +57,9 @@ public class CodeGenerator {
                 final TypeSpec.Builder typeSpecBuilder = generator.generate(name, item);
 
                 final String className = typeSpecBuilder.build().name;
-                final CustomAdder customAdder = CustomAdderFactory.getCustomAdder(className);
-                if (customAdder != null)
-                    customAdder.add(typeSpecBuilder, className);
+                final CustomGenerator customGenerator = CustomGeneratorFactory.getCustomAdder(className);
+                if (customGenerator != null)
+                    customGenerator.add(typeSpecBuilder, className);
 
                 final JavaFile javaFile = JavaFile.builder(generator.getPackageName(), typeSpecBuilder.build())
                         .skipJavaLangImports(true)
