@@ -52,7 +52,7 @@ public non-sealed class ObjectGenerator implements Generator<TelegramObject> {
 
         // If the telegram object requires a builder, generate it
         if (telegramObject.requiresBuilder()) {
-            generateBuilderClass(name, telegramObject.fields(), typeSpecBuilder, requiredFields, true);
+            generateBuilderClass(name, telegramObject.fields(), typeSpecBuilder, requiredFields);
         }
 
         // All work is done, we can build the JavaFile
