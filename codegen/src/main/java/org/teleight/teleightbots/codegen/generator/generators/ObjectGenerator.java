@@ -1,7 +1,6 @@
 package org.teleight.teleightbots.codegen.generator.generators;
 
 import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import org.teleight.teleightbots.codegen.json.TelegramField;
@@ -15,7 +14,7 @@ import java.util.Objects;
 public non-sealed class ObjectGenerator implements Generator<TelegramObject> {
 
     @Override
-    public JavaFile generate(String name, TelegramObject telegramObject) {
+    public TypeSpec.Builder generate(String name, TelegramObject telegramObject) {
         // If there are subtypes, that means the class must be a sealed class, and must permit its subtypes
         if (telegramObject.subtypes() != null) {
             return generateSealedClass(name, telegramObject);
@@ -36,7 +35,7 @@ public non-sealed class ObjectGenerator implements Generator<TelegramObject> {
 
         // If there are no fields, return the default JavaFile
         if (telegramObject.fields() == null) {
-            return buildJavaFile(typeSpecBuilder);
+            return typeSpecBuilder;
         }
 
         // Start adding the fields. Required fields are useful in case the object requires a builder
@@ -56,10 +55,15 @@ public non-sealed class ObjectGenerator implements Generator<TelegramObject> {
         }
 
         // All work is done, we can build the JavaFile
-        return buildJavaFile(typeSpecBuilder);
+        return typeSpecBuilder;
     }
 
-    private JavaFile generateSealedClass(String name, TelegramObject telegramObject) {
+    @Override
+    public String getPackageName() {
+        return OBJECTS_PACKAGE_NAME;
+    }
+
+    private TypeSpec.Builder generateSealedClass(String name, TelegramObject telegramObject) {
         TypeSpec.Builder typeSpecBuilder = TypeSpec.interfaceBuilder(name)
                 .addModifiers(Modifier.SEALED, Modifier.PUBLIC)
                 .addSuperinterface(API_RESULT_INTERFACE)
@@ -67,11 +71,7 @@ public non-sealed class ObjectGenerator implements Generator<TelegramObject> {
         for (TypeName subtype : telegramObject.subtypes()) {
             typeSpecBuilder.addPermits(subtype);
         }
-        return buildJavaFile(typeSpecBuilder);
-    }
-
-    private JavaFile buildJavaFile(TypeSpec.Builder typeSpecBuilder) {
-        return JavaFile.builder(OBJECTS_PACKAGE_NAME, typeSpecBuilder.build()).skipJavaLangImports(true).build();
+        return typeSpecBuilder;
     }
 
 }

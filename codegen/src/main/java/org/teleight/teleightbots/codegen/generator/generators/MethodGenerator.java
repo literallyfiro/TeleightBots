@@ -2,7 +2,6 @@ package org.teleight.teleightbots.codegen.generator.generators;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
@@ -20,7 +19,7 @@ import java.util.List;
 public non-sealed class MethodGenerator implements Generator<TelegramMethod> {
 
     @Override
-    public JavaFile generate(String key, TelegramMethod method) {
+    public TypeSpec.Builder generate(String key, TelegramMethod method) {
         // Methods are in camelCase. We need to make the first letter capitalized
         String correctedClassName = key.substring(0, 1).toUpperCase() + key.substring(1);
         
@@ -62,9 +61,12 @@ public non-sealed class MethodGenerator implements Generator<TelegramMethod> {
 
         generateBuilderClass(correctedClassName, method.fields(), typeSpecBuilder, requiredFields);
 
-        return JavaFile.builder(METHODS_PACKAGE_NAME, typeSpecBuilder.build())
-                .skipJavaLangImports(true)
-                .build();
+        return typeSpecBuilder;
+    }
+
+    @Override
+    public String getPackageName() {
+        return METHODS_PACKAGE_NAME;
     }
 
     private List<TelegramField> populateFields(TelegramMethod method, TypeSpec.Builder typeSpecBuilder) {

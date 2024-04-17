@@ -2,7 +2,6 @@ package org.teleight.teleightbots.codegen.generator.generators;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
@@ -28,7 +27,9 @@ public sealed interface Generator<T> permits ObjectGenerator, MethodGenerator {
     String METHODS_PACKAGE_NAME = "org.teleight.teleightbots.api.methods";
     String OBJECTS_PACKAGE_NAME = "org.teleight.teleightbots.api.objects";
 
-    JavaFile generate(String name, T t);
+    TypeSpec.Builder generate(String name, T t);
+
+    String getPackageName();
 
     default String toCamelCase(String snakeCase) {
         StringBuilder camelCaseBuilder = new StringBuilder();
