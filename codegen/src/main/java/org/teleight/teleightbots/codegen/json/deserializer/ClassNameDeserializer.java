@@ -14,7 +14,6 @@ import java.lang.reflect.Type;
 public class ClassNameDeserializer implements JsonDeserializer<TypeName[]> {
 
     String objectsPackageName = "org.teleight.teleightbots.api.objects";
-    String[] telegramPrimitiveClasses = new String[] { "Integer", "Long", "Float", "Double", "Boolean", "String" };
 
     @Override
     public TypeName[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -23,7 +22,6 @@ public class ClassNameDeserializer implements JsonDeserializer<TypeName[]> {
         for (int i = 0; i < typesArray.size(); i++) {
             String type = typesArray.get(i).getAsString();
             String packageName = isPrimitive(type) ? "" : objectsPackageName;
-
             if (type.endsWith("[]")) {
                 typeNames[i] = ArrayTypeName.of(ClassName.get(packageName, type.substring(0, type.length() - 2)));
             } else {
@@ -34,11 +32,11 @@ public class ClassNameDeserializer implements JsonDeserializer<TypeName[]> {
     }
 
     private boolean isPrimitive(String className) {
-        for (String telegramPrimitiveClass : telegramPrimitiveClasses) {
-            if (className.equals(telegramPrimitiveClass)) {
-                return true;
-            }
-        }
-        return false;
+        return className.contains("String")
+                || className.contains("Integer")
+                || className.contains("Long")
+                || className.contains("Float")
+                || className.contains("Double")
+                || className.contains("Boolean");
     }
 }

@@ -128,7 +128,7 @@ public sealed interface Generator<T> permits ObjectGenerator, MethodGenerator {
             if (requiredFields.contains(telegramField)) {
                 ofBuilder.addParameter(typeToSet, camelCaseField);
                 constructorBuilder.addParameter(typeToSet, camelCaseField);
-                constructorBuilder.addStatement("this.$N = $N", camelCaseField, telegramField.name());
+                constructorBuilder.addStatement("this.$N = $N", camelCaseField, camelCaseField);
             } else {
                 // Builder method for optional fields with NotNull annotation and chaining
                 MethodSpec.Builder methodSpecBuilder = MethodSpec.methodBuilder(camelCaseField)
@@ -154,7 +154,7 @@ public sealed interface Generator<T> permits ObjectGenerator, MethodGenerator {
                 .build());
 
         // Build the "of" method with parameters for required fields
-        String builderNiceString = listToNiceString(requiredFields, false, TelegramField::name);
+        String builderNiceString = listToNiceString(requiredFields, true, TelegramField::name);
         ofBuilder.addStatement("return new Builder($L)", builderNiceString);
         builderTypeSpecBuilder.addMethod(constructorBuilder.build());
 

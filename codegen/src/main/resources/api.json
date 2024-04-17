@@ -197,8 +197,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -293,8 +292,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -355,8 +353,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -417,8 +414,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -522,8 +518,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -600,8 +595,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -714,8 +708,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -852,8 +845,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -974,8 +966,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -1128,8 +1119,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -1274,8 +1264,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -1387,8 +1376,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -1493,8 +1481,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -1565,8 +1552,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -1685,8 +1671,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -1821,8 +1806,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -1925,8 +1909,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2093,8 +2076,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2174,8 +2156,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2211,8 +2192,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2256,7 +2236,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier of the target user"
@@ -2313,8 +2293,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername)"
@@ -2322,7 +2301,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier of the target user"
@@ -2358,8 +2337,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername)"
@@ -2367,7 +2345,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier of the target user"
@@ -2395,8 +2373,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -2404,7 +2381,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier of the target user"
@@ -2448,8 +2425,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2457,7 +2433,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier of the target user"
@@ -2597,8 +2573,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -2606,7 +2581,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier of the target user"
@@ -2634,8 +2609,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2663,8 +2637,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2692,8 +2665,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -2729,8 +2701,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2750,8 +2721,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2803,8 +2773,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2864,8 +2833,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier of the target chat or username of the target channel (in the format @channelusername)"
@@ -2893,8 +2861,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2902,7 +2869,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier of the target user"
@@ -2922,8 +2889,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2931,7 +2897,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier of the target user"
@@ -2951,8 +2917,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -2980,8 +2945,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -3001,8 +2965,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -3030,8 +2993,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -3059,8 +3021,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -3096,8 +3057,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -3125,8 +3085,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -3146,8 +3105,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)"
@@ -3167,8 +3125,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)"
@@ -3188,8 +3145,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)"
@@ -3209,8 +3165,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)"
@@ -3230,8 +3185,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)"
@@ -3239,7 +3193,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier of the target user"
@@ -3259,8 +3213,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3288,8 +3241,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3319,8 +3271,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3364,8 +3315,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3409,8 +3359,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3438,8 +3387,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3467,8 +3415,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3496,8 +3443,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3525,8 +3471,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3554,8 +3499,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3575,8 +3519,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3596,8 +3539,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3617,8 +3559,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3638,8 +3579,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -3711,8 +3651,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the chat or username of the channel (in the format @channelusername)"
@@ -3720,7 +3659,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier of the target user"
@@ -3996,7 +3935,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": false,
           "description": "Unique identifier for the target private chat. If not specified, default bot's menu button will be changed"
@@ -4024,7 +3963,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": false,
           "description": "Unique identifier for the target private chat. If not specified, default bot's menu button will be returned"
@@ -4093,8 +4032,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": false,
           "description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -4171,8 +4109,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": false,
           "description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -4241,8 +4178,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": false,
           "description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -4295,8 +4231,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": false,
           "description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -4381,8 +4316,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": false,
           "description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -4427,8 +4361,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": false,
           "description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -4472,8 +4405,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -4518,8 +4450,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -4547,8 +4478,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -4584,8 +4514,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -4705,7 +4634,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "User identifier of sticker file owner"
@@ -4741,7 +4670,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "User identifier of created sticker set owner"
@@ -4801,7 +4730,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "User identifier of sticker set owner"
@@ -4885,7 +4814,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "User identifier of the sticker set owner"
@@ -5049,7 +4978,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "User identifier of the sticker set owner"
@@ -5223,8 +5152,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)"
@@ -5705,7 +5633,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "User identifier"
@@ -5741,7 +5669,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat"
@@ -5810,7 +5738,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "User identifier"
@@ -5842,7 +5770,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": false,
           "description": "Required if inline_message_id is not specified. Unique identifier for the target chat"
@@ -5878,7 +5806,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Target user id"
@@ -5886,7 +5814,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": false,
           "description": "Required if inline_message_id is not specified. Unique identifier for the target chat"
@@ -6196,7 +6124,7 @@
         {
           "name": "id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for this user or bot. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier."
@@ -6301,7 +6229,7 @@
         {
           "name": "id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier."
@@ -6621,7 +6549,7 @@
         {
           "name": "linked_chat_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": false,
           "description": "Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier. Returned only in getChat."
@@ -7672,8 +7600,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": false,
           "description": "Optional. If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account."
@@ -8419,7 +8346,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": false,
           "description": "Optional. Contact's user identifier in Telegram. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier."
@@ -8948,7 +8875,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Identifier of the shared user. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so 64-bit integers or double-precision float types are safe for storing these identifiers. The bot may not have access to the user and could be unable to use this identifier, unless the user is already known to the bot by some other means."
@@ -9030,7 +8957,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Identifier of the shared chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the chat and could be unable to use this identifier, unless the chat is already known to the bot by some other means."
@@ -9429,7 +9356,7 @@
         {
           "name": "photos",
           "types": [
-            "Array of PhotoSize[]"
+            "PhotoSize[][]"
           ],
           "required": true,
           "description": "Requested profile pictures (in up to 4 sizes each)"
@@ -9504,7 +9431,7 @@
         {
           "name": "keyboard",
           "types": [
-            "Array of KeyboardButton[]"
+            "KeyboardButton[][]"
           ],
           "required": true,
           "description": "Array of button rows, each represented by an Array of KeyboardButton objects"
@@ -9831,7 +9758,7 @@
         {
           "name": "inline_keyboard",
           "types": [
-            "Array of InlineKeyboardButton[]"
+            "InlineKeyboardButton[][]"
           ],
           "required": true,
           "description": "Array of button rows, each represented by an Array of InlineKeyboardButton objects"
@@ -11626,8 +11553,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -11655,8 +11581,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -11684,8 +11609,7 @@
         {
           "name": "chat_id",
           "types": [
-            "Integer",
-            "String"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)"
@@ -11693,7 +11617,7 @@
         {
           "name": "user_id",
           "types": [
-            "Integer"
+            "Long"
           ],
           "required": true,
           "description": "Unique identifier of the target user"
