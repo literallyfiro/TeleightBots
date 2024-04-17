@@ -17,7 +17,12 @@ import java.net.http.HttpResponse;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        new CodeGenerator().generateApiClasses(getLatestApiJsonFromGithub("Teleight", "telegram-bot-api-spec"));
+        final boolean useGithub = System.getenv("github") != null;
+        if (useGithub) {
+            new CodeGenerator().generateApiClasses(getLatestApiJsonFromGithub("Teleight", "telegram-bot-api-spec"));
+        } else {
+            new CodeGenerator().generateApiClasses();
+        }
     }
 
     private static Reader getLatestApiJsonFromGithub(String owner, String repo) throws IOException, InterruptedException {

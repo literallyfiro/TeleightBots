@@ -12,6 +12,8 @@ import org.teleight.teleightbots.codegen.json.deserializer.ClassNameDeserializer
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Map;
 
@@ -25,6 +27,22 @@ public class CodeGenerator {
 
         generateClasses(root.types(), new ObjectGenerator());
         generateClasses(root.methods(), new MethodGenerator());
+    }
+
+    public void generateApiClasses() {
+        try (final InputStream in = getClass().getResourceAsStream("/api.json")) {
+            if (in == null) {
+                throw new RuntimeException("api.json not found");
+            }
+
+            final Gson gson = new GsonBuilder().registerTypeAdapter(TypeName[].class, new ClassNameDeserializer()).create();
+            final ApiRoot root = gson.fromJson(new InputStreamReader(in), ApiRoot.class);
+
+            generateClasses(root.types(), new ObjectGenerator());
+            generateClasses(root.methods(), new MethodGenerator());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public <T> void generateClasses(Map<String, T> items, Generator<? super T> generator) {
