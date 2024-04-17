@@ -14,7 +14,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @SuppressWarnings("SameParameterValue")
-public class Main {
+public class GeneratorMain {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         final boolean useGithub = System.getenv("github") != null;

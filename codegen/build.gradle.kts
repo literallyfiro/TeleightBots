@@ -28,6 +28,6 @@ tasks.test {
 tasks.withType(Jar::class) {
     manifest {
         attributes["Manifest-Version"] = "1.0"
-        attributes["Main-Class"] = "org.teleight.codegen.CodeGenerator"
+        attributes["Main-Class"] = "org.teleight.teleightbots.codegen.GeneratorMain"
     }
 }
