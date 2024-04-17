@@ -72,6 +72,7 @@ public non-sealed class MethodGenerator implements Generator<TelegramMethod> {
 
         List<TelegramField> requiredFields = new ArrayList<>();
         for (TelegramField field : method.fields()) {
+            if (field == null) continue;
             TypeName typeToSet = retrieveMostImportantType(field);
             
             FieldSpec.Builder fieldSpecBuilder = FieldSpec.builder(typeToSet, field.name());
