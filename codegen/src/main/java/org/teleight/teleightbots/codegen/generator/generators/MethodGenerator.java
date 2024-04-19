@@ -113,14 +113,24 @@ public non-sealed class MethodGenerator implements Generator<TelegramMethod> {
                 .addAnnotation(Override.class)
                 .addAnnotation(NOT_NULL_ANNOTATION)
                 .addModifiers(Modifier.PUBLIC)
-                .addStatement("$T result = new $T<>()", listParameterizedType, ArrayList.class)
+                .addCode("return $T.of(", List.class)
                 .returns(listParameterizedType);
 
-        for (TypeName returnClass : method.returns()) {
-            methodSpecBuilder.addStatement("result.add($T.class)", returnClass);
+        boolean isLast;
+        final TypeName[] returns = method.returns();
+        for (int i = 0; i < returns.length; i++) {
+            TypeName returnClass = returns[i];
+            isLast = i == returns.length - 1;
+
+            methodSpecBuilder.addCode("$T.class", returnClass);
+            if (!isLast) {
+                methodSpecBuilder.addCode(", ");
+            } else {
+                methodSpecBuilder.addCode(");");
+            }
+
         }
 
-        methodSpecBuilder.addStatement("return result");
         typeSpecBuilder.addMethod(methodSpecBuilder.build());
     }
 
