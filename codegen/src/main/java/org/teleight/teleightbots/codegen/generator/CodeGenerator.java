@@ -59,7 +59,7 @@ public class CodeGenerator {
                 final String className = typeSpecBuilder.build().name;
                 final CustomGenerator customGenerator = CustomGeneratorFactory.getCustomAdder(className);
                 if (customGenerator != null)
-                    customGenerator.add(typeSpecBuilder, className);
+                    customGenerator.generate(typeSpecBuilder, className);
 
                 final JavaFile javaFile = JavaFile.builder(generator.getPackageName(), typeSpecBuilder.build())
                         .skipJavaLangImports(true)

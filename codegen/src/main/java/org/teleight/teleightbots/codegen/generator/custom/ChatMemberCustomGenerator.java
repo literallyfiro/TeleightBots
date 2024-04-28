@@ -11,9 +11,9 @@ import javax.lang.model.element.Modifier;
 
 import static org.teleight.teleightbots.codegen.generator.generators.Generator.JAVA_CLASS_CLASSNAME;
 
-public class ChatMemberCustomGenerator implements CustomGenerator {
+public non-sealed class ChatMemberCustomGenerator implements CustomGenerator {
     @Override
-    public void add(TypeSpec.Builder classBuilder, String className) {
+    public void generate(TypeSpec.Builder classBuilder, String className) {
         if (className.equals("ChatMember")) {
             classBuilder.addMethod(MethodSpec.methodBuilder("user")
                     .returns(ClassName.get("org.teleight.teleightbots.api.objects", "User"))

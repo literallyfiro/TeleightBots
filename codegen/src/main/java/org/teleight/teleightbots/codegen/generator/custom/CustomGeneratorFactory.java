@@ -11,7 +11,8 @@ public class CustomGeneratorFactory {
                  "ChatMemberRestricted",
                  "ChatMemberLeft",
                  "ChatMemberBanned" -> new ChatMemberCustomGenerator();
-            case "User" -> null;
+            case "InputFile" -> new InputFileCustomGenerator();
+            case "Chat" -> new ChatCustomGenerator();
             default -> null;
         };
     }
