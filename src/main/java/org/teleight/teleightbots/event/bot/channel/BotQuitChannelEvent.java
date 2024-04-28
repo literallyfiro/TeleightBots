@@ -12,7 +12,7 @@ public record BotQuitChannelEvent(
 ) implements Event {
 
     public Chat chat(){
-        return update().my_chat_member().chat();
+        return update().myChatMember().chat();
     }
 
 }

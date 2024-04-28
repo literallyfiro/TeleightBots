@@ -38,7 +38,7 @@ public non-sealed class MethodGenerator implements Generator<TelegramMethod> {
         }
 
         // Start populating the fields of the record
-        List<TelegramField> requiredFields = populateFields(method, typeSpecBuilder);
+        Map<TelegramField, Boolean> populatedFields = populateFields(method.fields(), typeSpecBuilder);
 
         // Override the getEndpointURL method
         typeSpecBuilder.addMethod(MethodSpec.methodBuilder("getEndpointURL")
@@ -59,7 +59,7 @@ public non-sealed class MethodGenerator implements Generator<TelegramMethod> {
             generateMultipleReturnMethod(method, typeSpecBuilder);
         }
 
-        generateBuilderClass(correctedClassName, method.fields(), typeSpecBuilder, requiredFields);
+        generateBuilderClass(correctedClassName, populatedFields, typeSpecBuilder);
 
         return typeSpecBuilder;
     }

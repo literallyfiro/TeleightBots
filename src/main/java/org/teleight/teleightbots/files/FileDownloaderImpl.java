@@ -43,13 +43,13 @@ public class FileDownloaderImpl implements FileDownloader {
 
     @Override
     public final @NotNull CompletableFuture<java.io.File> downloadFile(@NotNull File telegramFile) throws DownloadFileException {
-        final java.io.File tempFile = createTempFile(telegramFile.file_id());
+        final java.io.File tempFile = createTempFile(telegramFile.fileId());
         return downloadFile(telegramFile, tempFile);
     }
 
     @Override
     public final @NotNull CompletableFuture<java.io.File> downloadFile(@NotNull File telegramFile, @NotNull java.io.File outputFile) throws DownloadFileException {
-        final String filePath = telegramFile.file_path();
+        final String filePath = telegramFile.filePath();
         if (filePath == null) {
             throw new DownloadFileException("Unable to download file. File path is null");
         }

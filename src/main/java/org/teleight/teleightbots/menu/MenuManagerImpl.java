@@ -52,8 +52,8 @@ public final class MenuManagerImpl implements MenuManager {
         final Chat chat = message.chat();
         final String chatId = "" + chat.id();
         final String callbackData = callbackQuery.data();
-        final String inlineMessageId = callbackQuery.inline_message_id();
-        final int messageId = message.message_id();
+        final String inlineMessageId = callbackQuery.inlineMessageId();
+        final int messageId = message.messageId();
 
         if(callbackData == null){
             return;

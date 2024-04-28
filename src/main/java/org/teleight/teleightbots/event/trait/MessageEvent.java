@@ -19,7 +19,7 @@ public interface MessageEvent extends Event {
             return CompletableFuture.completedFuture(null);
         }
         return bot().execute(SendMessage.of(message.chat().id(), text)
-                .replyParameters(ReplyParameters.of(message.message_id()).build())
+                .replyParameters(ReplyParameters.of(message.messageId()).build())
                 .build()
         );
     }

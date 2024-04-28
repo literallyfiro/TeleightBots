@@ -1,28 +1,39 @@
 package org.teleight.teleightbots.codegen.generator.generators;
 
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.teleight.teleightbots.codegen.json.TelegramField;
 
 import javax.lang.model.element.Modifier;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public sealed interface Generator<T> permits ObjectGenerator, MethodGenerator {
 
     ClassName API_METHOD_INTERFACE = ClassName.get("org.teleight.teleightbots.api", "ApiMethod");
+    ClassName API_MULTIPART_METHOD_INTERFACE = ClassName.get("org.teleight.teleightbots.api", "MultiPartApiMethod");
     ClassName API_RESULT_INTERFACE = ClassName.get("org.teleight.teleightbots.api", "ApiResult");
     ClassName API_RESULT_SERIALIZABLE_INTERFACE = ClassName.get("org.teleight.teleightbots.api", "ApiMethodSerializable");
-
-    ClassName NOT_NULL_ANNOTATION = ClassName.get("org.jetbrains.annotations", "NotNull");
+    ClassName INPUTFILE = ClassName.get("org.teleight.teleightbots.api.objects", "InputFile");
 
     ClassName JAVA_LIST_CLASSNAME = ClassName.get(List.class);
+    ClassName JAVA_MAP_CLASSNAME = ClassName.get(Map.class);
+    ClassName OBJECT_CLASSNAME = ClassName.get(Object.class);
+    ClassName JAVA_STRING_CLASSNAME = ClassName.get(String.class);
     ClassName JAVA_CLASS_CLASSNAME = ClassName.get(Class.class);
+
+    ClassName JSON_PROPERTY_CLASSNAME = ClassName.get("com.fasterxml.jackson.annotation", "JsonProperty");
 
     String METHODS_PACKAGE_NAME = "org.teleight.teleightbots.api.methods";
     String OBJECTS_PACKAGE_NAME = "org.teleight.teleightbots.api.objects";
@@ -88,9 +99,42 @@ public sealed interface Generator<T> permits ObjectGenerator, MethodGenerator {
         return sb.toString();
     }
 
-    default void generateBuilderClass(String className, TelegramField[] fields, TypeSpec.Builder typeSpecBuilder, List<TelegramField> requiredFields) {
+    default Map<TelegramField, Boolean> populateFields(TelegramField[] fields, TypeSpec.Builder typeSpecBuilder) {
+        if (fields == null) return Map.of();
+
+        Map<TelegramField, Boolean> populatedFields = new LinkedHashMap<>();
+        for (TelegramField field : fields) {
+            if (field == null) continue;
+            TypeName typeToSet = retrieveMostImportantType(field);
+            String camelCaseFieldName = toCamelCase(field.name());
+
+            FieldSpec.Builder fieldSpecBuilder = FieldSpec.builder(typeToSet, camelCaseFieldName)
+                    .addAnnotation(AnnotationSpec.builder(JSON_PROPERTY_CLASSNAME)
+                            .addMember("value", "$S", field.name())
+                            //.addMember("required", "$L", field.required())
+                            .build()
+                    );
+
+            if (field.required()) {
+                fieldSpecBuilder.addAnnotation(NotNull.class);
+            } else {
+                fieldSpecBuilder.addAnnotation(Nullable.class);
+            }
+
+            typeSpecBuilder.addJavadoc("\n@param $L $L", camelCaseFieldName, field.description());
+
+            typeSpecBuilder.addField(fieldSpecBuilder.build());
+
+            populatedFields.put(field, field.required());
+        }
+        return populatedFields;
+    }
+
+    default void generateBuilderClass(String className,
+                                      Map<TelegramField, Boolean> populatedFields,
+                                      TypeSpec.Builder typeSpecBuilder) {
         // Check for empty fields
-        if (fields == null) {
+        if (populatedFields == null) {
             return;
         }
 
@@ -108,46 +152,15 @@ public sealed interface Generator<T> permits ObjectGenerator, MethodGenerator {
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(ClassName.get("", "Builder"));
 
-        // Process each field
-        for (TelegramField telegramField : fields) {
-            TypeName typeToSet = retrieveMostImportantType(telegramField);
-            String camelCaseField = toCamelCase(telegramField.name());
+        // Process each field - I kinda hate this
+        processBuilderField(populatedFields, builderTypeSpecBuilder, ofBuilder, constructorBuilder);
 
-            // Field definition in Builder class
-            FieldSpec.Builder fieldSpecBuilder = FieldSpec.builder(typeToSet, camelCaseField)
-                    .addModifiers(Modifier.PRIVATE);
-
-            // If required field, mark as final
-            if (telegramField.required()) {
-                fieldSpecBuilder.addModifiers(Modifier.FINAL);
-            }
-
-            // Add field to Builder class
-            builderTypeSpecBuilder.addField(fieldSpecBuilder.build());
-
-            // Add parameter and assignment for required fields in constructor and of method
-            if (requiredFields.contains(telegramField)) {
-                ofBuilder.addParameter(typeToSet, camelCaseField);
-                constructorBuilder.addParameter(typeToSet, camelCaseField);
-                constructorBuilder.addStatement("this.$N = $N", camelCaseField, camelCaseField);
-            } else {
-                // Builder method for optional fields with NotNull annotation and chaining
-                MethodSpec.Builder methodSpecBuilder = MethodSpec.methodBuilder(camelCaseField)
-                        .addModifiers(Modifier.PUBLIC)
-                        .addAnnotation(NOT_NULL_ANNOTATION)
-                        .returns(ClassName.get("", "Builder"))
-                        .addParameter(ParameterSpec.builder(typeToSet, camelCaseField).addAnnotation(NOT_NULL_ANNOTATION).build())
-                        .addStatement("this.$N = $N", camelCaseField, camelCaseField)
-                        .addStatement("return this");
-                try {
-                    methodSpecBuilder.addJavadoc(telegramField.description());
-                } catch (Exception ignored) {}
-                builderTypeSpecBuilder.addMethod(methodSpecBuilder.build());
-            }
-        }
+        // I hate this more
+        List<TelegramField> allFields = new ArrayList<>(populatedFields.keySet());
+        List<TelegramField> requiredFields = populatedFields.keySet().stream().filter(TelegramField::required).collect(Collectors.toList());
 
         // Build method for final object creation
-        String niceString = listToNiceString(Arrays.asList(fields), true, TelegramField::name);
+        String niceString = listToNiceString(allFields, true, TelegramField::name);
         builderTypeSpecBuilder.addMethod(MethodSpec.methodBuilder("build")
                 .addModifiers(Modifier.PUBLIC)
                 .returns(ClassName.get("", className))
@@ -164,5 +177,49 @@ public sealed interface Generator<T> permits ObjectGenerator, MethodGenerator {
         typeSpecBuilder.addMethod(ofBuilder.build());
     }
 
+    private void processBuilderField(Map<TelegramField, Boolean> populatedFields,
+                                     TypeSpec.Builder builderTypeSpecBuilder,
+                                     MethodSpec.Builder ofBuilder,
+                                     MethodSpec.Builder constructorBuilder) {
+        for (Map.Entry<TelegramField, Boolean> telegramFieldBooleanEntry : populatedFields.entrySet()) {
+            TelegramField telegramField = telegramFieldBooleanEntry.getKey();
+            boolean required = telegramField.required();
+
+            TypeName typeToSet = retrieveMostImportantType(telegramField);
+            String camelCaseField = toCamelCase(telegramField.name());
+
+            // Field definition in Builder class
+            FieldSpec.Builder fieldSpecBuilder = FieldSpec.builder(typeToSet, camelCaseField)
+                    .addModifiers(Modifier.PRIVATE);
+
+            // If required field, mark as final
+            if (telegramField.required()) {
+                fieldSpecBuilder.addModifiers(Modifier.FINAL);
+            }
+
+            // Add field to Builder class
+            builderTypeSpecBuilder.addField(fieldSpecBuilder.build());
+
+            // Add parameter and assignment for required fields in constructor and of method
+            if (required) {
+                ofBuilder.addParameter(typeToSet, camelCaseField);
+                constructorBuilder.addParameter(typeToSet, camelCaseField);
+                constructorBuilder.addStatement("this.$N = $N", camelCaseField, camelCaseField);
+            } else {
+                // Builder method for optional fields with NotNull annotation and chaining
+                MethodSpec.Builder methodSpecBuilder = MethodSpec.methodBuilder(camelCaseField)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addAnnotation(NotNull.class)
+                        .returns(ClassName.get("", "Builder"))
+                        .addParameter(ParameterSpec.builder(typeToSet, camelCaseField).addAnnotation(NotNull.class).build())
+                        .addStatement("this.$N = $N", camelCaseField, camelCaseField)
+                        .addStatement("return this");
+                try {
+                    methodSpecBuilder.addJavadoc(telegramField.description());
+                } catch (Exception ignored) {}
+                builderTypeSpecBuilder.addMethod(methodSpecBuilder.build());
+            }
+        }
+    }
 
 }

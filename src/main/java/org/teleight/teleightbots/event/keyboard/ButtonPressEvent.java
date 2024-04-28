@@ -18,7 +18,7 @@ public record ButtonPressEvent(
 ) implements Event {
 
     public @NotNull CallbackQuery callbackQuery() {
-        return update.callback_query();
+        return update.callbackQuery();
     }
 
     public @NotNull User from() {

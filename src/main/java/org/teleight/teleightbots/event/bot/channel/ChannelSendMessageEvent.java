@@ -14,7 +14,7 @@ public record ChannelSendMessageEvent(
 ) implements Event {
 
     public @NotNull Message channelPost(){
-        return update.channel_post();
+        return update.channelPost();
     }
 
 }

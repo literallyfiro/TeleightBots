@@ -21,8 +21,8 @@ public interface GroupBotEvent extends Event {
      * @return the Chat object associated with the event
      */
     default Chat chat() {
-        if (update().my_chat_member() != null) {
-            return update().my_chat_member().chat();
+        if (update().myChatMember() != null) {
+            return update().myChatMember().chat();
         } else {
             return update().message().chat();
         }

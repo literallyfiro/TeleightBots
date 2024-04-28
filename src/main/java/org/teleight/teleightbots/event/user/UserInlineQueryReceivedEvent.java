@@ -14,11 +14,11 @@ public record UserInlineQueryReceivedEvent(
 
     @NotNull
     public User user() {
-        return update().inline_query().from();
+        return update().inlineQuery().from();
     }
 
     public InlineQuery inlineQuery() {
-        return update().inline_query();
+        return update().inlineQuery();
     }
 
 }
