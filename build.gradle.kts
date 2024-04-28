@@ -81,3 +81,18 @@ tasks.withType<ShadowJar> {
 
     archiveFileName.set("TeleightBots.jar")
 }
+
+tasks.register<JavaExec>("generateTelegramObjects") {
+    group = "application"
+    description = "Runs the codegen module"
+
+    dependsOn(":codegen:shadowJar")
+
+    val codegenJar = project(":codegen").tasks.getByName("shadowJar").outputs.files.singleFile
+    mainClass = "org.teleight.teleightbots.codegen.GeneratorMain"
+    classpath(codegenJar.absolutePath)
+
+    doLast {
+        println("\nCode generation finished.")
+    }
+}
