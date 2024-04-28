@@ -1,6 +1,5 @@
 package org.teleight.teleightbots.api.utils;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -14,7 +13,7 @@ public class ParseModeDeserializer extends StdDeserializer<ParseMode> {
     }
 
     @Override
-    public ParseMode deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException, JacksonException {
+    public ParseMode deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
         return ParseMode.valueOf(jsonParser.getText().toUpperCase());
     }
 

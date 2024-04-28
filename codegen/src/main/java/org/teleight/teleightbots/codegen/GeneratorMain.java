@@ -12,25 +12,34 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Objects;
 
 @SuppressWarnings("SameParameterValue")
 public class GeneratorMain {
 
+    private static final String REPO_OWNER = "Teleight";
+    private static final String REPO_NAME = "telegram-bot-api-spec";
+
     public static void main(String[] args) throws IOException, InterruptedException {
         final boolean useGithub = System.getenv("github") != null;
+        final CodeGenerator codeGenerator = new CodeGenerator();
+
         if (useGithub) {
-            new CodeGenerator().generateApiClasses(getLatestApiJsonFromGithub("Teleight", "telegram-bot-api-spec"));
+            codeGenerator.generateApiClasses(getLatestApiJsonFromGithub());
         } else {
-            new CodeGenerator().generateApiClasses();
+            try (final InputStream in = GeneratorMain.class.getResourceAsStream("/api.json")) {
+                Reader reader = new InputStreamReader(Objects.requireNonNull(in));
+                codeGenerator.generateApiClasses(reader);
+            }
         }
     }
 
-    private static Reader getLatestApiJsonFromGithub(String owner, String repo) throws IOException, InterruptedException {
+    private static Reader getLatestApiJsonFromGithub() throws IOException, InterruptedException {
         try (var httpClient = HttpClient.newHttpClient()) {
             // Get the latest release URL
-            URI latestReleaseUrl = URI.create("https://api.github.com/repos/" + owner + "/" + repo + "/releases/latest");
+            URI latestReleaseUrl = URI.create("https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/releases/latest");
 
-            // Build the GET request for latest release
+            // Build the GET request for the latest release
             HttpRequest latestReleaseRequest = HttpRequest.newBuilder()
                     .uri(latestReleaseUrl)
                     .setHeader("Accept", "application/vnd.github.v3+json")
@@ -67,8 +76,5 @@ public class GeneratorMain {
             return new InputStreamReader(downloadResponse.body());
         }
     }
-
-
-
 
 }
