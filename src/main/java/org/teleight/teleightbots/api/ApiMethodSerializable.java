@@ -7,15 +7,38 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Base API method that supports requests with multiple response types
+ */
 public interface ApiMethodSerializable extends ApiMethod<Serializable> {
 
+    /**
+     * Retrieves the list of classes representing possible types for deserialization of the response.
+     *
+     * @return A {@code List} of classes extending {@code Serializable}.
+     */
     List<Class<? extends Serializable>> getSerializableClasses();
 
+    /**
+     * Deserializes the response from a string answer.
+     *
+     * @param answer The string representing the response.
+     * @return The deserialized response object.
+     * @throws TelegramRequestException If an error occurs during deserialization.
+     */
     @Override
     default @NotNull Serializable deserializeResponse(@NotNull String answer) throws TelegramRequestException {
         return deserializeResponseFromPossibilities(answer, getSerializableClasses());
     }
 
+    /**
+     * Deserializes the response from a string answer using a list of possible classes.
+     *
+     * @param answer           The string representing the response.
+     * @param possibleValues   The list of possible classes for deserialization.
+     * @return The deserialized response object.
+     * @throws TelegramRequestException If an error occurs during deserialization.
+     */
     default Serializable deserializeResponseFromPossibilities(String answer, List<Class<? extends Serializable>> possibleValues) throws TelegramRequestException {
         Throwable lastException = null;
         for (Class<? extends Serializable> possibleValue : possibleValues) {

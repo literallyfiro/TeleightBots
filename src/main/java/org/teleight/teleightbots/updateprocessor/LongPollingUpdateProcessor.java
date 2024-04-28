@@ -315,14 +315,18 @@ public class LongPollingUpdateProcessor implements UpdateProcessor {
 
         if (method instanceof MultiPartApiMethod<?> multiPartApiMethod) {
             final MultiPartBodyPublisher publisher = new MultiPartBodyPublisher();
-            multiPartApiMethod.buildRequest(publisher);
+            for (Map.Entry<String, Object> stringObjectEntry : multiPartApiMethod.getParams().entrySet()) {
+                publisher.addPart(stringObjectEntry.getKey(), ApiMethod.OBJECT_MAPPER.writeValueAsString(stringObjectEntry.getValue()));
+            }
+            for (Map.Entry<String, InputFile> stringInputFileEntry : multiPartApiMethod.getFiles().entrySet()) {
+                final InputFile file = stringInputFileEntry.getValue();
+                publisher.addPart(stringInputFileEntry.getKey(), file.file(), file.fileName());
+            }
             body = publisher.build();
-
             requestBuilder.header("Content-Type", "multipart/form-data; boundary=" + publisher.getBoundary());
         } else {
             final String jsonString = ApiMethod.OBJECT_MAPPER.writeValueAsString(method);
             body = HttpRequest.BodyPublishers.ofString(jsonString);
-
             requestBuilder.header("Content-Type", "application/json");
         }
 

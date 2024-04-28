@@ -1,25 +1,32 @@
 package org.teleight.teleightbots.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.teleight.teleightbots.utils.MultiPartBodyPublisher;
+import org.jetbrains.annotations.NotNull;
+import org.teleight.teleightbots.api.objects.InputFile;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
- * Interface representing a multipart API method.
- * <p>
- * This interface extends the ApiMethod interface and provides a method to build a request with a multipart body.
+ * Base API method that supports multipart requests, allowing both parameters and files to be sent.
  *
- * @param <R> the type of the response expected from the API method
+ * @param <R> The type of the response object expected from this API method.
  */
 public interface MultiPartApiMethod<R extends Serializable> extends ApiMethod<R> {
 
     /**
-     * Builds a request with a multipart body.
+     * Retrieves the parameters associated with this API method.
      *
-     * @param bodyCreator the MultiPartBodyPublisher used to create the multipart body
-     * @throws JsonProcessingException if there is an error processing the JSON
+     * @return A {@code Map} containing the parameters as key-value pairs.
      */
-    void buildRequest(MultiPartBodyPublisher bodyCreator) throws JsonProcessingException;
+    @NotNull
+    Map<String, Object> getParams();
+
+    /**
+     * Retrieves the files associated with this API method.
+     *
+     * @return A {@code Map} containing the files as key-value pairs, where the key is the parameter name and the value is the file.
+     */
+    @NotNull
+    Map<String, InputFile> getFiles();
 
 }
