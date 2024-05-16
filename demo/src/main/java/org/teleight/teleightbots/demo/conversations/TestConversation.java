@@ -2,6 +2,9 @@ package org.teleight.teleightbots.demo.conversations;
 
 import org.jetbrains.annotations.NotNull;
 import org.teleight.teleightbots.api.methods.SendMessage;
+import org.teleight.teleightbots.api.objects.Chat;
+import org.teleight.teleightbots.api.objects.Message;
+import org.teleight.teleightbots.api.objects.Update;
 import org.teleight.teleightbots.conversation.Conversation;
 import org.teleight.teleightbots.conversation.ConversationContext;
 import org.teleight.teleightbots.conversation.ConversationTimeout;
@@ -12,33 +15,45 @@ public class TestConversation implements Conversation {
 
     @Override
     public void execute(@NotNull ConversationContext context) {
-        var chat = context.chat();
-        var chatId = chat.id();
+        final Chat chat = context.chat();
+        final String chatId = String.valueOf(chat.id());
 
+        // Let's start the conversation by sending a message to the user
         SendMessage startMessage = SendMessage.of(chatId, "Send me a messages with the text \"hello\"").build();
-        context.execute(startMessage);
+        context.bot().execute(startMessage);
 
-        var update = context.waitForUpdate(10, TimeUnit.SECONDS);
+        // Now, let's wait for an update. We give the user 10 seconds to reply.
+        // If the result is null, that means the bot did not receive an update in time
+        final Update update = context.waitForUpdate(10, TimeUnit.SECONDS);
+
         if (update == null) {
+            // And this is the case, so let's leave the conversation and send an error message to the user
             SendMessage resultToUser = SendMessage.of(chatId, "you didnt send the message in time..").build();
-            context.execute(resultToUser);
+            context.bot().execute(resultToUser);
             return;
         }
-        var message = update.message();
+
+        // Let's get a message from the update
+        final Message message = update.message();
+
         if(message == null){
-            SendMessage resultToUser = SendMessage.of(chatId, "you didnt send a message..").build();
-            context.execute(resultToUser);
+            // The message is null, and it's not what we want
+            // This happens when the bot receives an update which does not contain a message.
+            SendMessage resultToUser = SendMessage.of(chatId, "You didnt send a message..").build();
+            context.bot().execute(resultToUser);
             return;
         }
+
+        // Let's console print the message sent by the user, just for fun
         System.out.println("Message: " + message.text());
 
-
-        if (message.text().equals("hello")) {
-            SendMessage resultToUser = SendMessage.of(chatId, "Good job!").build();
-            context.execute(resultToUser);
-        } else {
+        // Now, check if the text equals hello or not and act appropriately
+        if (message.text() == null || !message.text().equals("hello")) {
             SendMessage resultToUser = SendMessage.of(chatId, "You didn't send \"hello\"!").build();
-            context.execute(resultToUser);
+            context.bot().execute(resultToUser);
+        } else {
+            SendMessage resultToUser = SendMessage.of(chatId, "Good job!").build();
+            context.bot().execute(resultToUser);
         }
     }
 
