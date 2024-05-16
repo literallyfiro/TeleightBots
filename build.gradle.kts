@@ -82,6 +82,10 @@ tasks.withType<ShadowJar> {
     archiveFileName.set("TeleightBots.jar")
 }
 
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
 tasks.register<JavaExec>("generateTelegramObjects") {
     group = "application"
     description = "Runs the codegen module"
