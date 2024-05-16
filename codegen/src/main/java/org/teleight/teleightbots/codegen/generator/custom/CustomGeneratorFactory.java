@@ -13,6 +13,7 @@ public class CustomGeneratorFactory {
                  "ChatMemberBanned" -> new ChatMemberCustomGenerator();
             case "InputFile" -> new InputFileCustomGenerator();
             case "Chat" -> new ChatCustomGenerator();
+            case "SendMessage" -> new ParseModeGenerator();
             default -> null;
         };
     }

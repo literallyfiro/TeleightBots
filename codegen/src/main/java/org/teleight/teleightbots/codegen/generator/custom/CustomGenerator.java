@@ -5,7 +5,8 @@ import com.squareup.javapoet.TypeSpec;
 public sealed interface CustomGenerator permits
         ChatCustomGenerator,
         ChatMemberCustomGenerator,
-        InputFileCustomGenerator {
+        InputFileCustomGenerator,
+        ParseModeGenerator {
 
     void generate(TypeSpec.Builder classBuilder, String className);
 
