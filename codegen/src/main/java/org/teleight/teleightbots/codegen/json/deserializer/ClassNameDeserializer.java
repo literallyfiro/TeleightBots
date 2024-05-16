@@ -11,9 +11,9 @@ import com.squareup.javapoet.TypeName;
 
 import java.lang.reflect.Type;
 
-public class ClassNameDeserializer implements JsonDeserializer<TypeName[]> {
+import static org.teleight.teleightbots.codegen.generator.generators.Generator.OBJECTS_PACKAGE_NAME;
 
-    String objectsPackageName = "org.teleight.teleightbots.api.objects";
+public class ClassNameDeserializer implements JsonDeserializer<TypeName[]> {
 
     @Override
     public TypeName[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -21,9 +21,13 @@ public class ClassNameDeserializer implements JsonDeserializer<TypeName[]> {
         TypeName[] typeNames = new TypeName[typesArray.size()];
         for (int i = 0; i < typesArray.size(); i++) {
             String type = typesArray.get(i).getAsString();
-            String packageName = isPrimitive(type) ? "" : objectsPackageName;
-            if (type.endsWith("[]")) {
-                typeNames[i] = ArrayTypeName.of(ClassName.get(packageName, type.substring(0, type.length() - 2)));
+            String packageName = isPrimitive(type) ? "" : OBJECTS_PACKAGE_NAME;
+            if (type.startsWith("Array of")) {
+                if (type.startsWith("Array of Array of")) {
+                    typeNames[i] = ArrayTypeName.of(ArrayTypeName.of(ClassName.get(packageName, type.substring("Array of Array of ".length()))));
+                } else {
+                    typeNames[i] = ArrayTypeName.of(ClassName.get(packageName, type.substring("Array of ".length())));
+                }
             } else {
                 typeNames[i] = ClassName.get(packageName, type);
             }

@@ -80,14 +80,14 @@ public final class MenuManagerImpl implements MenuManager {
 
             if (shouldChangeText) {
                 final EditMessageText editMessageText = EditMessageText.of(text)
-                        .chatId(Long.valueOf(chatId))
+                        .chatId(chatId)
                         .messageId(messageId)
                         .replyMarkup(keyboard)
                         .build();
                 event.execute(editMessageText);
             } else {
                 final EditMessageReplyMarkup editMessageReplyMarkup = EditMessageReplyMarkup.of()
-                        .chatId(Long.valueOf(chatId))
+                        .chatId(chatId)
                         .messageId(messageId)
                         .inlineMessageId(inlineMessageId)
                         .replyMarkup(keyboard)

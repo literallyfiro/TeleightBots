@@ -11,11 +11,13 @@ version = "1.0"
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
+    implementation(rootProject)
     implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
-    implementation("io.soabase.java-composer:java-composer:1.0")
+    implementation("io.soabase.java-composer:java-composer:1.2-SNAPSHOT")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.jetbrains:annotations:24.0.1")
 }
