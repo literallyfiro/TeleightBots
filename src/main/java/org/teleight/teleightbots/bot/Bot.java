@@ -131,24 +131,6 @@ public final class Bot implements TelegramBot {
     }
 
     @Override
-    public @NotNull <R extends Serializable> CompletableFuture<R> execute(@NotNull ApiMethod<R> method) {
-        final CompletableFuture<String> responseFuture = updateProcessor.executeMethod(method);
-        return responseFuture.thenApplyAsync(responseJson -> {
-            final R result;
-            try {
-                result = method.deserializeResponse(responseJson);
-            } catch (Exception e) {
-                if (shouldPrintExceptions) {
-                    e.printStackTrace();
-                }
-                throw new TelegramRequestException(e);
-            }
-            eventManager.call(new MethodSendEvent<>(Bot.this, method, result));
-            return result;
-        });
-    }
-
-    @Override
     public @NotNull ExtensionManager getExtensionManager() {
         return extensionManager;
     }
@@ -173,6 +155,24 @@ public final class Bot implements TelegramBot {
         } catch (Exception e) {
             TeleightBots.getExceptionManager().handleException(e);
         }
+    }
+
+    @Override
+    public @NotNull <R extends Serializable> CompletableFuture<R> execute(@NotNull ApiMethod<R> method) {
+        final CompletableFuture<String> responseFuture = updateProcessor.executeMethod(method);
+        return responseFuture.thenApplyAsync(responseJson -> {
+            final R result;
+            try {
+                result = method.deserializeResponse(responseJson);
+            } catch (Exception e) {
+                if (shouldPrintExceptions) {
+                    e.printStackTrace();
+                }
+                throw new TelegramRequestException(e);
+            }
+            eventManager.call(new MethodSendEvent<>(Bot.this, method, result));
+            return result;
+        });
     }
 
 }
