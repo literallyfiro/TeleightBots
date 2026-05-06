@@ -2,6 +2,7 @@ plugins {
     `java-library`
     alias(libs.plugins.shadow)
     alias(libs.plugins.publisher)
+    alias(libs.plugins.lombok)
 }
 
 val groupId = "org.teleight"
