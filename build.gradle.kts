@@ -52,6 +52,7 @@ tasks.test {
 }
 
 tasks.javadoc {
+    dependsOn(tasks.delombok)
     options {
         require(this is StandardJavadocDocletOptions)
         addStringOption("Xdoclint:all,-missing", "-quiet")
